@@ -14,39 +14,30 @@ It combines GPX processing, Overpass API queries, flexible OSM filters, Excel ex
 - Fully configurable through YAML and command line arguments
 - Modular codebase for easy extension
 
-## Project Structure
-osm_finder/
-  main.py
-  config.yaml
-  presets.yaml
-  README.md
-  core/
-    cli.py
-    config.py
-    presets.py
-    overpass.py
-    gpx_processing.py
-    filtering.py
-    folium_map.py
-    export.py
-
 ## Installation
-Clone the repository:
+### Clone the repository
 ```bash
 git clone https://github.com/your_username/osm_finder.git
 cd osm_finder
 ```
 
-Install dependencies:
+### Install dependencies
+```
 pip install -r requirements.txt
+```
 
 Or install manually:
+```
 pip install gpxpy shapely pyproj requests tqdm folium pyyaml pandas
+```
 
-Configuration
-All default settings are stored in config.yaml.
+## Configuration
 
-Example config:
+All default settings are stored in `config.yaml`.
+
+### Example config:
+
+```yaml
 project:
   name: output
   output_path: ./
@@ -79,11 +70,15 @@ overpass:
     - https://lz4.overpass-api.de/api/interpreter
 
 presets_file: presets.yaml
+```
 
-Presets
-The file presets.yaml contains predefined filter profiles.
+## Presets
 
-Example presets:
+The file `presets.yaml` contains predefined filter profiles.
+
+### Example presets:
+
+```yaml
 presets:
   camp_basic:
     include:
@@ -104,47 +99,66 @@ presets:
   drinking_water:
     include:
       - amenity=drinking_water
+```
 
-Usage
+## Usage
+
 Run with default configuration:
+```bash
 python3 main.py
+```
 
 Override GPX file:
+```bash
 python3 main.py --gpx-file Tag1.gpx
+```
 
 Use a preset:
+```bash
 python3 main.py --preset camp_and_caravan
+```
 
 Combine presets:
+```bash
 python3 main.py --preset camp_basic --preset drinking_water
+```
 
 Add include filters:
+```bash
 python3 main.py --include amenity=toilets
+```
 
 Add exclude filters:
+```bash
 python3 main.py --exclude fee=yes
+```
 
 Full example:
+```bash
 python3 main.py --preset camp_basic --include amenity=toilets --exclude fee=yes --gpx-file Tag1.gpx --project-name Tour2025
+```
 
-Output
+## Output
+
 The tool generates two files:
-<project_name>.xlsx
-<project_name>.html
 
-Both files are saved in the directory defined by project.output_path.
+- `<project_name>.xlsx`
+- `<project_name>.html`
 
-Technical Notes
+Both files are saved in the directory defined by `project.output_path`.
+
+## Technical Notes
+
 - Overpass queries are executed in segments along the track
 - Distances are computed using WGS84 geodesic calculations
 - Track projection uses EPSG 3857
 - Marker colors depend on distance to the track
-- Filters are validated to ensure key=value format
+- Filters are validated to ensure `key=value` format
 - Duplicate results are removed
 
-Contributing
-Pull requests are welcome.  
-Please open an issue if you find bugs or want to request features.
+## Contributing
 
-License
-You may add a license of your choice here.
+Pull requests are welcome. Please open an issue if you find bugs or want to request features.
+
+## License
+

@@ -16,7 +16,7 @@ It combines GPX processing, Overpass API queries, flexible OSM filters, Excel ex
 ## Installation
 ### Clone the repository
 ```bash
-git clone https://github.com/your_username/osm_finder.git
+git clone https://github.com/rikmueller/osm_finder.git
 cd osm_finder
 ```
 
@@ -44,7 +44,7 @@ pip install -r requirements.txt
 
 Or install manually:
 ```bash
-pip install gpxpy shapely pyproj requests tqdm folium pyyaml pandas
+pip install gpxpy shapely pyproj requests tqdm folium pyyaml pandas openpyxl
 ```
 
 ## Configuration
@@ -205,6 +205,7 @@ osm_finder stands on the shoulders of great open-source projects:
 - **[Folium](https://github.com/python-visualization/folium)** - Python data to interactive Leaflet maps
 - **[Shapely](https://github.com/Toblerity/Shapely)** - Python geometric operations library
 - **[pandas](https://github.com/pandas-dev/pandas)** - Data analysis and manipulation library
+- **[openpyxl](https://github.com/chronossc/openpyxl)** - Python library to read/write Excel files
 - **[Requests](https://github.com/psf/requests)** - HTTP library for Python
 - **[tqdm](https://github.com/tqdm/tqdm)** - Progress bar library
 - **[GPX Studio](https://gpx.studio/)** - Modern GPX viewer and editor, inspired me to start this project

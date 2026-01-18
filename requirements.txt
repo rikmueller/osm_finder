@@ -6,3 +6,4 @@ tqdm
 folium
 pyyaml
 pandas
+openpyxl

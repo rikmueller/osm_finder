@@ -8,7 +8,7 @@ __pycache__/
 venv/
 env/
 .gpxenv/
-.venv_osm_finder/
+venv_osm_finder/
 
 # OS junk
 .DS_Store

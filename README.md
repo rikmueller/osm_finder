@@ -144,16 +144,13 @@ pip install gpxpy shapely pyproj requests tqdm folium pyyaml pandas openpyxl
 
 ## Configuration
 
-All default settings are stored in `config.yaml`. However, **you don't need to edit the config file** - most settings can be overridden using command line arguments. For example:
+### config.yaml (defaults)
 
-- `--gpx-file mytrack.gpx` overrides the input GPX file
-- `--include amenity=toilets` adds include filters
-- `--project-name MyProject` sets the output project name
-- etc.
+All default settings are stored in `config.yaml`. You can keep a single `config.yaml` with your preferred defaults and adjust settings per run using CLI arguments.
 
-This means you can keep a single `config.yaml` with your preferred defaults and adjust settings per run using CLI arguments.
+**Note:** Most settings can be overridden using command line arguments - you don't need to edit the config file for every change.
 
-### Example config:
+#### Example config:
 
 ```yaml
 project:
@@ -222,6 +219,31 @@ presets_file: "presets.yaml"
 - Colors markers on map by filter rank: camping sites get red (Filter 1), any second filter gets orange, etc.
 - Saves results to `./output/` as `MyProject_<date>_<timestamp>.xlsx` and `MyProject_<date>_<timestamp>.html`
 - Map starts at zoom level 10 with blue track line
+
+### CLI
+
+The following command line arguments can override settings from `config.yaml`:
+
+| Argument | Type | Description | Example |
+|----------|------|-------------|---------|
+| `--config` | string | Path to YAML configuration file | `--config my_config.yaml` |
+| `--project-name` | string | Project name (overrides config.yaml) | `--project-name MyTour` |
+| `--output-path` | string | Output directory (overrides config.yaml) | `--output-path ./results/` |
+| `--gpx-file` | string | Path to GPX file (overrides config.yaml) | `--gpx-file route.gpx` |
+| `--radius-km` | number | Search radius in km (overrides config.yaml) | `--radius-km 10` |
+| `--step-km` | number | Distance between query points in km (overrides config.yaml) | `--step-km 2` |
+| `--preset` | string | Preset name from presets.yaml (can be used multiple times) | `--preset camp_basic --preset drinking_water` |
+| `--include` | string | Add include filter key=value (can be used multiple times) | `--include amenity=toilets` |
+| `--exclude` | string | Add exclude filter key=value (can be used multiple times) | `--exclude fee=yes` |
+
+**Note:** When using `--preset`, `--include`, or `--exclude`, the default filters from `config.yaml` are **ignored** - only the CLI arguments are used.
+
+#### CLI Examples
+
+- `--gpx-file mytrack.gpx` overrides the input GPX file
+- `--include amenity=toilets` adds include filters
+- `--project-name MyProject` sets the output project name
+- `--radius-km 10` changes the search radius to 10 km
 
 ## Presets
 

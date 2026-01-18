@@ -27,14 +27,21 @@ map:
   zoom_start: 10
   # Color of the track line on the map
   track_color: "blue"
-  # Marker colors based on distance to track
-  marker_colors:
-    # Color for objects within 2 km of track
-    near: "green"
-    # Color for objects 2-5 km from track
-    mid: "orange"
-    # Color for objects more than 5 km from track
-    far: "red"
+  # Color palette for markers based on filter rank
+  # Colors are assigned to filters in order: Filter1=palette[0], Filter2=palette[1], etc.
+  marker_color_palette:
+    - "red"
+    - "orange"
+    - "purple"
+    - "green"
+    - "blue"
+    - "darkred"
+    - "darkblue"
+    - "darkgreen"
+    - "cadetblue"
+    - "pink"
+  # Default color if more filters than colors in palette
+  default_marker_color: "gray"
 
 overpass:
   # Number of retry attempts for failed Overpass API requests

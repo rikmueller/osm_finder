@@ -51,6 +51,7 @@ def main():
         track_info=track_info,
         radius_km=config["search"]["radius_km"],
         exclude_filters=exclude_filters,
+        include_filters=include_filters,
     )
 
     # Export to Excel
@@ -67,6 +68,7 @@ def main():
         output_path=config["project"]["output_path"],
         project_name=config["project"]["name"],
         map_cfg=config["map"],
+        include_filters=include_filters,
     )
 
     print(f"✅ Done! {len(df)} objects found.")

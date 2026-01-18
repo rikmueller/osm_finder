@@ -4,9 +4,10 @@ from folium.plugins import LocateControl
 from datetime import datetime
 
 
-def build_folium_map(df, track_points, output_path: str, project_name: str, map_cfg: dict) -> str:
+def build_folium_map(df, track_points, output_path: str, project_name: str, map_cfg: dict, include_filters: list = None) -> str:
     """
     Generate a Folium map with track and markers.
+    Marker colors are assigned based on filter rank.
     """
     os.makedirs(output_path, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -30,28 +31,30 @@ def build_folium_map(df, track_points, output_path: str, project_name: str, map_
         opacity=0.8,
     ).add_to(m)
 
-    colors = map_cfg.get("marker_colors", {})
-    near_color = colors.get("near", "green")
-    mid_color = colors.get("mid", "orange")
-    far_color = colors.get("far", "red")
+    # Get color palette and create filter-to-color mapping by rank
+    color_palette = map_cfg.get("marker_color_palette", ["red", "orange", "purple", "green", "blue"])
+    default_color = map_cfg.get("default_marker_color", "gray")
+    
+    filter_to_color = {}
+    if include_filters:
+        for idx, filt in enumerate(include_filters):
+            color = color_palette[idx % len(color_palette)] if color_palette else default_color
+            filter_to_color[filt] = color
 
     for _, row in df.iterrows():
         popup_html = f"""
         <b>{row['Name']}</b><br>
         <b>Kilometers from start:</b> {row['Kilometers from start']}<br>
         <b>Distance from track:</b> {row['Distance from track (km)']} km<br>
+        <b>Filter:</b> {row.get('Matching Filter', 'N/A')}<br>
         <b>Website:</b> <a href="{row['Website']}" target="_blank">{row['Website']}</a><br>
         <b>Phone:</b> {row['Phone']}<br>
         <b>Opening hours:</b> {row['Opening hours']}
         """
 
-        dist = row["Distance from track (km)"]
-        if dist <= 2:
-            color = near_color
-        elif dist <= 5:
-            color = mid_color
-        else:
-            color = far_color
+        # Get color based on filter rank
+        matching_filter = row.get("Matching Filter", "")
+        color = filter_to_color.get(matching_filter, default_color)
 
         folium.Marker(
             location=[row["lat"], row["lon"]],

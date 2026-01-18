@@ -14,9 +14,10 @@ def filter_elements_and_build_rows(
     track_info,
     radius_km: float,
     exclude_filters: list,
+    include_filters: list = None,
 ):
     """
-    Apply exclusion filters, calculate distance to track, and build DataFrame.
+    Apply exclusion filters, calculate distance to track, identify matching filter, and build DataFrame.
     """
     transformer = Transformer.from_crs("EPSG:4326", "EPSG:3857", always_xy=True)
     track_points_m = [transformer.transform(*p) for p in track_points]
@@ -28,6 +29,7 @@ def filter_elements_and_build_rows(
     geod = Geod(ellps="WGS84")
 
     parsed_excludes = [parse_filter(f) for f in exclude_filters]
+    parsed_includes = [parse_filter(f) for f in (include_filters or [])]
 
     rows = []
 
@@ -98,10 +100,18 @@ def filter_elements_and_build_rows(
         if min_distance_m > radius_km * 1000:
             continue
 
+        # Identify which include filter matched
+        matching_filter = ""
+        for inc_key, inc_value in parsed_includes:
+            if tags.get(inc_key) == inc_value:
+                matching_filter = f"{inc_key}={inc_value}"
+                break
+
         rows.append(
             {
                 "Kilometers from start": round(closest_position_km, 2),
                 "Distance from track (km)": round(min_distance_m / 1000, 2),
+                "Matching Filter": matching_filter,
                 "Name": name,
                 "Website": website,
                 "Phone": phone,

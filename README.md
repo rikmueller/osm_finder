@@ -90,14 +90,21 @@ map:
   zoom_start: 10
   # Color of the track line on the map
   track_color: "blue"
-  # Marker colors based on distance to track
-  marker_colors:
-    # Color for objects within 2 km of track
-    near: "green"
-    # Color for objects 2-5 km from track
-    mid: "orange"
-    # Color for objects more than 5 km from track
-    far: "red"
+  # Color palette for markers based on filter rank
+  # Colors are assigned to filters in order: Filter1=palette[0], Filter2=palette[1], etc.
+  marker_color_palette:
+    - "red"
+    - "orange"
+    - "purple"
+    - "green"
+    - "blue"
+    - "darkred"
+    - "darkblue"
+    - "darkgreen"
+    - "cadetblue"
+    - "pink"
+  # Default color if more filters than colors in palette
+  default_marker_color: "gray"
 
 overpass:
   # Number of retry attempts for failed Overpass API requests
@@ -113,9 +120,11 @@ presets_file: "presets.yaml"
 ```
 
 **What this config does:**
-- This example configuration searches for camping sites (excluding those without tent options) within 5 km of your GPX track. 
-- The GPX file is expected at `./input/track.gpx`. 
-- It generates an Excel file and interactive map 
+- This example configuration searches for camping sites (excluding those without tent options) within 5 km of your GPX track.
+- The GPX file is expected at `./input/track.gpx`.
+- It generates an Excel file with a "Matching Filter" column and an interactive map.
+- Markers on the map are colored by filter: camping sites get the first color in the palette (red), any second filter would be orange, etc.
+- Results are saved to `./output/` as `MyProject_<date>_<timestamp>.xlsx` and `MyProject_<date>_<timestamp>.html`. 
 - The map starts at zoom level 10 with a blue track line and markers color-coded by distance: green for locations within 2 km, orange for 2-5 km, and red for locations farther away. 
 - Results are saved to `./output/`.
 
@@ -209,17 +218,27 @@ python3 main.py --preset camp_basic --include amenity=toilets --exclude fee=yes 
 
 The tool generates two files:
 
-- `<project_name>_<date>_<timestamp>.xlsx`
-- `<project_name>_<date>_<timestamp>.html`
+- **Excel file** (`<project_name>_<date>_<timestamp>.xlsx`): Contains all found objects with details including:
+  - Name, Website, Phone, Opening hours
+  - Kilometers from start of track
+  - Distance from track (km)
+  - **Matching Filter** - Shows which include filter matched each object
+  - OSM Tags
 
-Both files are saved in the directory defined by `project.output_path`.
+- **Interactive map** (`<project_name>_<date>_<timestamp>.html`): Folium map featuring:
+  - Your GPX track (blue line)
+  - Markers colored by filter (first filter = red, second = orange, etc.)
+  - Popup information for each marker
+  - Locate button to show your current position
+
+Both files are saved in the directory defined by `project.output_path` (default: `./output/`).
 
 ## Technical Notes
 
 - Overpass queries are executed in segments along the track
-- Distances are computed using WGS84 geodesic calculations
-- Track projection uses EPSG 3857
-- Marker colors depend on distance to the track
+- Distances are computed using WGS84 geodesic calculations (accurate across all latitudes)
+- Marker colors are assigned by filter rank: Filter1 uses `palette[0]`, Filter2 uses `palette[1]`, etc.
+- Filter matching allows you to track which search criteria found each object
 - Filters are validated to ensure `key=value` format
 - Duplicate results are removed
 - For a complete list of available OSM tags, visit [TagInfo](https://taginfo.openstreetmap.org/) or the [OSM Wiki](https://wiki.openstreetmap.org/wiki/Map_Features)

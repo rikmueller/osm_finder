@@ -32,14 +32,14 @@ def build_folium_map(df, track_points, output_path: str, project_name: str, map_
     for _, row in df.iterrows():
         popup_html = f"""
         <b>{row['Name']}</b><br>
-        <b>km:</b> {row['Streckenkilometer (km)']}<br>
-        <b>Distance:</b> {row['Entfernung zum Track (km)']} km<br>
-        <b>Website:</b> <a href="{row['Webseite']}" target="_blank">{row['Webseite']}</a><br>
-        <b>Phone:</b> {row['Telefon']}<br>
-        <b>Opening hours:</b> {row['Öffnungszeiten']}
+        <b>km:</b> {row['Track kilometers (km)']}<br>
+        <b>Distance:</b> {row['Distance to track (km)']} km<br>
+        <b>Website:</b> <a href="{row['Website']}" target="_blank">{row['Website']}</a><br>
+        <b>Phone:</b> {row['Phone']}<br>
+        <b>Opening hours:</b> {row['Opening hours']}
         """
 
-        dist = row["Entfernung zum Track (km)"]
+        dist = row["Distance to track (km)"]
         if dist <= 2:
             color = near_color
         elif dist <= 5:

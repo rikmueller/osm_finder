@@ -76,18 +76,18 @@ def filter_elements_and_build_rows(
             {
                 "lat": lat2,
                 "lon": lon2,
-                "Streckenkilometer (km)": round(nearest_km, 2),
+                "Track kilometers (km)": round(nearest_km, 2),
                 "Name": name,
-                "Webseite": website,
-                "Telefon": phone,
-                "Öffnungszeiten": opening_hours,
-                "Entfernung zum Track (km)": round(distance_m / 1000, 2),
+                "Website": website,
+                "Phone": phone,
+                "Opening hours": opening_hours,
+                "Distance to track (km)": round(distance_m / 1000, 2),
                 "OSM Tags": str(tags),
             }
         )
 
     df = pd.DataFrame(rows).drop_duplicates()
     if not df.empty:
-        df.sort_values("Streckenkilometer (km)", inplace=True)
+        df.sort_values("Track kilometers (km)", inplace=True)
 
     return rows, df

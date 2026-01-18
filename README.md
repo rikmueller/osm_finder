@@ -227,11 +227,10 @@ The following command line arguments can override settings from `config.yaml`:
 | Argument | Type | Description | Example |
 |----------|------|-------------|---------|
 | `--config` | string | Path to YAML configuration file | `--config my_config.yaml` |
-| `--project-name` | string | Project name (overrides config.yaml) | `--project-name MyTour` |
-| `--output-path` | string | Output directory (overrides config.yaml) | `--output-path ./results/` |
-| `--gpx-file` | string | Path to GPX file (overrides config.yaml) | `--gpx-file route.gpx` |
-| `--radius-km` | number | Search radius in km (overrides config.yaml) | `--radius-km 10` |
-| `--step-km` | number | Distance between query points in km (overrides config.yaml) | `--step-km 2` |
+| `--project-name` | string | Project name | `--project-name MyTour` |
+| `--output-path` | string | Output directory | `--output-path ./results/` |
+| `--gpx-file` | string | Path to GPX file | `--gpx-file route.gpx` |
+| `--radius-km` | number | Search radius in km | `--radius-km 10` |
 | `--preset` | string | Preset name from presets.yaml (can be used multiple times) | `--preset camp_basic --preset drinking_water` |
 | `--include` | string | Add include filter key=value (can be used multiple times) | `--include amenity=toilets` |
 | `--exclude` | string | Add exclude filter key=value (can be used multiple times) | `--exclude fee=yes` |

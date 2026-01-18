@@ -1,5 +1,6 @@
 import os
 import folium
+from datetime import datetime
 
 
 def build_folium_map(df, track_points, output_path: str, project_name: str, map_cfg: dict) -> str:
@@ -7,7 +8,8 @@ def build_folium_map(df, track_points, output_path: str, project_name: str, map_
     Generate a Folium map with track and markers.
     """
     os.makedirs(output_path, exist_ok=True)
-    html_path = os.path.join(output_path, f"{project_name}.html")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    html_path = os.path.join(output_path, f"{project_name}_{timestamp}.html")
 
     start_lon, start_lat = track_points[0]
 
@@ -32,14 +34,14 @@ def build_folium_map(df, track_points, output_path: str, project_name: str, map_
     for _, row in df.iterrows():
         popup_html = f"""
         <b>{row['Name']}</b><br>
-        <b>km:</b> {row['Track kilometers (km)']}<br>
-        <b>Distance:</b> {row['Distance to track (km)']} km<br>
+        <b>Kilometers from start:</b> {row['Kilometers from start']}<br>
+        <b>Distance from track:</b> {row['Distance from track (km)']} km<br>
         <b>Website:</b> <a href="{row['Website']}" target="_blank">{row['Website']}</a><br>
         <b>Phone:</b> {row['Phone']}<br>
         <b>Opening hours:</b> {row['Opening hours']}
         """
 
-        dist = row["Distance to track (km)"]
+        dist = row["Distance from track (km)"]
         if dist <= 2:
             color = near_color
         elif dist <= 5:

@@ -17,6 +17,9 @@ Thumbs.db
 # Output files
 *.xlsx
 *.html
+# But do track example files
+!example*.xlsx
+!example*.html
 
 # Logs
 *.log

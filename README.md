@@ -71,6 +71,7 @@ search:
   # Set to null to auto-calculate as 60% of radius_km (highly suggested)
   step_km: null
   # OSM tags to search for (include filters)
+  # Find available tags at: https://taginfo.openstreetmap.org/
   include:
     - "tourism=camp_site"
   # OSM tags to exclude from results (exclude filters)
@@ -175,8 +176,8 @@ python3 main.py --preset camp_basic --include amenity=toilets --exclude fee=yes 
 
 The tool generates two files:
 
-- `<project_name>.xlsx`
-- `<project_name>.html`
+- `<project_name>_<date>_<timestamp>.xlsx`
+- `<project_name>_<date>_<timestamp>.html`
 
 Both files are saved in the directory defined by `project.output_path`.
 
@@ -188,9 +189,23 @@ Both files are saved in the directory defined by `project.output_path`.
 - Marker colors depend on distance to the track
 - Filters are validated to ensure `key=value` format
 - Duplicate results are removed
+- For a complete list of available OSM tags, visit [TagInfo](https://taginfo.openstreetmap.org/) or the [OSM Wiki](https://wiki.openstreetmap.org/wiki/Map_Features)
 
 ## Contributing
 
 Pull requests are welcome. Please open an issue if you find bugs or want to request features.
 
+## Credits
+
+osm_finder stands on the shoulders of great open-source projects:
+
+- **[OpenStreetMap](https://www.openstreetmap.org/)** - The collaborative mapping platform providing the data
+- **[Overpass API](https://overpass-api.de/)** - Powerful API for querying OpenStreetMap data
+- **[gpxpy](https://github.com/tkrajina/gpxpy)** - Python GPX file parsing library
+- **[Folium](https://github.com/python-visualization/folium)** - Python data to interactive Leaflet maps
+- **[Shapely](https://github.com/Toblerity/Shapely)** - Python geometric operations library
+- **[pandas](https://github.com/pandas-dev/pandas)** - Data analysis and manipulation library
+- **[Requests](https://github.com/psf/requests)** - HTTP library for Python
+- **[tqdm](https://github.com/tqdm/tqdm)** - Progress bar library
+- **[GPX Studio](https://gpx.studio/)** - Modern GPX viewer and editor, inspired me to start this project
 

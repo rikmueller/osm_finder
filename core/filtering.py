@@ -74,20 +74,20 @@ def filter_elements_and_build_rows(
 
         rows.append(
             {
-                "lat": lat2,
-                "lon": lon2,
-                "Track kilometers (km)": round(nearest_km, 2),
+                "Kilometers from start": round(nearest_km, 2),
+                "Distance from track (km)": round(distance_m / 1000, 2),
                 "Name": name,
                 "Website": website,
                 "Phone": phone,
                 "Opening hours": opening_hours,
-                "Distance to track (km)": round(distance_m / 1000, 2),
                 "OSM Tags": str(tags),
+                "lat": lat2,
+                "lon": lon2
             }
         )
 
     df = pd.DataFrame(rows).drop_duplicates()
     if not df.empty:
-        df.sort_values("Track kilometers (km)", inplace=True)
+        df.sort_values("Kilometers from start", inplace=True)
 
     return rows, df

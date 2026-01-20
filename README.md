@@ -86,19 +86,6 @@ Two files are created in `./output/`:
 - Click markers to see details
 - Use "Locate" button to see your current position
 
-**5. Plan your tour**:
-
-Use the Excel file to:
-- Identify daily stages (distance between campsites)
-- Note amenities at each location
-- Call ahead if you have questions
-- Create a backup plan for bad weather (use shelters)
-
-Use the map to:
-- Visualize distances visually
-- Find the closest options
-- Scout routes on mobile
-
 ### Result
 You now have a complete guide for your trip, all generated automatically from real OpenStreetMap data!
 

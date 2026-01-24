@@ -4,13 +4,14 @@ from folium.plugins import LocateControl
 from datetime import datetime
 
 
-def build_folium_map(df, track_points, output_path: str, project_name: str, map_cfg: dict, include_filters: list = None) -> str:
+def build_folium_map(df, track_points, output_path: str, project_name: str, map_cfg: dict, include_filters: list = None, timestamp: str = None) -> str:
     """
     Generate a Folium map with track and markers.
     Marker colors are assigned based on filter rank.
     """
     os.makedirs(output_path, exist_ok=True)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    if timestamp is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     html_path = os.path.join(output_path, f"{project_name}_{timestamp}.html")
 
     start_lon, start_lat = track_points[0]

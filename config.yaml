@@ -2,11 +2,15 @@ project:
   # Name used for output files (xlsx and html)
   name: "MyProject"
   # Directory where output files will be saved
-  output_path: "./output/"
+  output_path: "./data/output/"
+  # Timezone for file timestamps (e.g., "Europe/Berlin", "UTC", "America/New_York")
+  # Set via environment variable: ALONGGPX_TIMEZONE
+  # See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  timezone: "Europe/Berlin"
 
 input:
   # Path to the GPX file containing the track to analyze
-  gpx_file: "./input/track.gpx"
+  gpx_file: "./data/input/track.gpx"
 
 search:
   # Search radius in kilometers around each track segment

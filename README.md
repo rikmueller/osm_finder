@@ -3,6 +3,75 @@
 AlongGPX is a modular Python tool that analyzes OpenStreetMap POIs along a GPX track.  
 It combines GPX processing, Overpass API queries, flexible OSM filters, Excel export, and interactive Folium maps.
 
+## 📁 Project Structure
+
+```
+AlongGPX/
+├── cli/                    # Command-line interface
+│   ├── main.py            # CLI entry point
+│   └── .env.example       # CLI environment template
+├── docker/                 # Docker/Web application
+│   ├── app.py             # Flask REST API
+│   ├── Dockerfile         # Docker build configuration
+│   ├── docker-compose.yml # Container orchestration
+│   ├── requirements-web.txt # Web dependencies
+│   └── .env.example       # Web environment template
+├── core/                   # Shared pipeline modules
+│   ├── cli.py             # Argument parsing
+│   ├── config.py          # Configuration management
+│   ├── presets.py         # Filter presets
+│   ├── gpx_processing.py  # GPX parsing and metrics
+│   ├── overpass.py        # Overpass API queries
+│   ├── filtering.py       # Result filtering
+│   ├── export.py          # Excel export
+│   └── folium_map.py      # Map generation
+├── docs/                   # Documentation
+│   ├── DOCKER.md          # Docker deployment guide
+│   ├── QUICKSTART.md      # Quick start guide
+│   └── IMPLEMENTATION.md  # Implementation details
+├── data/
+│   ├── input/              # GPX files (default)
+│   └── output/             # Generated results
+├── config.yaml            # Shared configuration
+├── presets.yaml           # Filter presets
+├── requirements-base.txt  # Core dependencies (CLI)
+└── README.md              # This file
+```
+
+## 🚀 Quick Start
+
+### Option 1: CLI Mode (Local)
+
+```bash
+# Install dependencies
+pip install -r requirements-base.txt
+
+# Run with defaults
+python3 cli/main.py
+
+# With custom settings
+python3 cli/main.py --gpx-file ./data/input/track.gpx --radius-km 10 --preset camp_basic
+```
+
+### Option 2: Web API (Docker)
+
+```bash
+# Start the web service
+cd docker
+docker-compose up -d
+
+# Test the API
+curl -F "file=@../data/input/track.gpx" \
+     -F "project_name=MyTrip" \
+     http://localhost:5000/api/process
+```
+
+## 📖 Documentation
+
+- **[Quick Start Guide](docs/QUICKSTART.md)** - Get up and running quickly
+- **[Docker Deployment](docs/DOCKER.md)** - Web API deployment guide
+- **[Implementation Details](docs/IMPLEMENTATION.md)** - Architecture and design decisions
+
 ## Use Case
 
 You have a GPX track (from your GPS device, mapping app, or drawn on a map). You want to find specific amenities, services, or landmarks near your planned route. Instead of manually searching the map for each area, AlongGPX automatically finds everything for you and creates:
@@ -21,6 +90,7 @@ Perfect for trip planning, hiking, bikepacking, road trips, or any adventure whe
 - Generate an interactive Folium map with color-coded markers by filter type
 - Fully configurable through YAML and command line arguments
 - Accurate WGS84 geodesic distance calculations
+- **CLI and Web API modes** for different use cases
 
 ## Real-World Example: Bikepacking Tour Planning
 
@@ -39,11 +109,10 @@ You're planning a 5-day bikepacking tour through a region you've never visited. 
 
 **1. Prepare your GPX file**
 Download or create your route in an app like [GPX Studio](https://gpx.studio/) and save it as `my_bikepacking_route.gpx`
-
-**2. Run AlongGPX**
+ (CLI)**
 ```bash
-python3 main.py \
-  --gpx-file my_bikepacking_route.gpx \
+python3 cli/main.py \
+  --gpx-file ./data/input/my_bikepacking_route.gpx \
   --preset camp_basic \
   --include amenity=drinking_water \
   --include amenity=shelter \
@@ -68,7 +137,7 @@ python3 main.py \
 
 **4. Output created**
 
-Two files are created in `./output/`:
+Two files are created in `./data/output/`:
 
 **Excel File**:
 | Name                     | Kilometers from start | Distance from track (km) | Matching Filter         | Website          | Phone        | Opening hours |
@@ -120,14 +189,14 @@ venv\Scripts\activate
 Your prompt should now show `(venv)` at the beginning, indicating the virtual environment is active.
 
 ### Install dependencies
+
+**For CLI:**
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-base.txt
 ```
 
-Or install manually:
-```bash
-pip install gpxpy shapely pyproj requests tqdm folium pyyaml pandas openpyxl
-```
+**For Docker/Web API:**
+No local installation needed - Docker handles dependencies via `docker/requirements-web.txt`
 
 ## Configuration
 
@@ -144,11 +213,11 @@ project:
   # Name used for output files (xlsx and html)
   name: "MyProject"
   # Directory where output files will be saved
-  output_path: "./output/"
+  output_path: "./data/output/"
 
 input:
   # Path to the GPX file containing the track to analyze
-  gpx_file: "./input/track.gpx"
+  gpx_file: "./data/input/track.gpx"
 
 search:
   # Search radius in kilometers around each track segment
@@ -236,37 +305,37 @@ For a complete list of available presets and how to create your own, see the [Pr
 
 > **Important:** When using `--preset`, `--include`, or `--exclude` arguments, the default filters from `config.yaml` are ignored. Only the filters you specify via CLI arguments will be used.
 
-Run with default configuration (config.yaml):
-```bash
-python3 main.py
+Run withcli/main.py
 ```
 
 Override GPX file:
 ```bash
-python3 main.py --gpx-file mytrack.gpx
+python3 cli/main.py --gpx-file mytrack.gpx
 ```
 
 Use a preset:
 ```bash
-python3 main.py --preset camp_and_caravan
+python3 cli/main.py --preset camp_and_caravan
 ```
 
 Combine presets:
 ```bash
-python3 main.py --preset camp_basic --preset drinking_water
+python3 cli/main.py --preset camp_basic --preset drinking_water
 ```
 
 Add include filters:
 ```bash
-python3 main.py --include amenity=toilets
+python3 cli/main.py --include amenity=toilets
 ```
 
 Add exclude filters:
 ```bash
-python3 main.py --exclude fee=yes
+python3 cli/main.py --exclude fee=yes
 ```
 
 Full example:
+```bash
+python3 cli/mple:
 ```bash
 python3 main.py --preset camp_basic --include amenity=toilets --exclude fee=yes --gpx-file mytrack.gpx --project-name Tour2025
 ```
@@ -297,6 +366,7 @@ AlongGPX stands on the shoulders of great open-source projects:
 - **[Shapely](https://github.com/Toblerity/Shapely)** - Python geometric operations library
 - **[pandas](https://github.com/pandas-dev/pandas)** - Data analysis and manipulation library
 - **[openpyxl](https://github.com/chronossc/openpyxl)** - Python library to read/write Excel files
+- **[Flask](https://github.com/pallets/flask)** - Web framework for the REST API
 - **[Requests](https://github.com/psf/requests)** - HTTP library for Python
 - **[tqdm](https://github.com/tqdm/tqdm)** - Progress bar library
 - **[GPX Studio](https://gpx.studio/)** - Modern GPX viewer and editor, inspired me to start this project

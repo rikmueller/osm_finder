@@ -1,9 +1,0 @@
-gpxpy
-shapely
-pyproj
-requests
-tqdm
-folium
-pyyaml
-pandas
-openpyxl

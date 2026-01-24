@@ -3,8 +3,15 @@
 Run AlongGPX locally via the command line in about 5 minutes.
 
 ## Prerequisites
+- Git (to clone the repository)
 - Python 3.8+ (`python3 --version`)
 - pip (`python3 -m pip --version`)
+
+## 0) Clone the Repository
+```bash
+git clone https://github.com/rikmueller/AlongGPX.git
+cd AlongGPX
+```
 
 ## 1) Create a Virtual Environment (Recommended)
 

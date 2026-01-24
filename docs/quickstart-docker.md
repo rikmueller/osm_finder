@@ -3,8 +3,15 @@
 Run AlongGPX as a web API with Docker and Docker Compose in ~2 minutes.
 
 ## Prerequisites
+- Git (to clone the repository)
 - Docker ≥ 20.10
 - Docker Compose ≥ 1.29
+
+## 0) Clone the Repository
+```bash
+git clone https://github.com/rikmueller/AlongGPX.git
+cd AlongGPX
+```
 
 ## 1) Start the Container
 ```bash

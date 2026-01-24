@@ -1,5 +1,8 @@
+import logging
 import gpxpy
 from pyproj import Geod
+
+logger = logging.getLogger(__name__)
 
 
 def load_gpx_track(gpx_file: str):
@@ -17,8 +20,10 @@ def load_gpx_track(gpx_file: str):
     ]
 
     if not track_points:
+        logger.error(f"No track points found in {gpx_file}")
         raise ValueError(f"No track points found in {gpx_file}.")
-
+    
+    logger.info(f"Loaded {len(track_points)} track points from {gpx_file}")
     return track_points
 
 

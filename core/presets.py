@@ -39,8 +39,8 @@ def apply_presets_to_filters(
     - Additional CLI filters
     and validate the syntax.
     """
-    # Only use base filters if NO CLI arguments are provided
-    if preset_names or cli_include or cli_exclude:
+    # Only use base filters if NO CLI arguments are provided (check for None, not truthiness)
+    if preset_names is not None or cli_include is not None or cli_exclude is not None:
         include = []
         exclude = []
     else:

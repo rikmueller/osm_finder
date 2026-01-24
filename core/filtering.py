@@ -1,6 +1,9 @@
+import logging
 from shapely.geometry import LineString, Point
 from pyproj import Transformer, Geod
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 
 def parse_filter(filter_str: str):

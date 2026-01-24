@@ -1,6 +1,9 @@
 import time
+import logging
 import requests
 import math
+
+logger = logging.getLogger(__name__)
 
 
 def build_overpass_query_batch(points, radius_km, include_filters):
@@ -56,14 +59,15 @@ def query_overpass_with_retries(query: str, overpass_cfg: dict):
             try:
                 r = requests.post(server, data=query, timeout=60)
                 if r.status_code == 200:
+                    logger.info(f"Overpass query successful from {server}")
                     return r.json()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Overpass server {server} failed: {e}")
         wait = 2 * (attempt + 1)
-        print(f"⚠️ Overpass error – Retrying in {wait}s")
+        logger.warning(f"Overpass error – Retrying in {wait}s (attempt {attempt + 1}/{retries})")
         time.sleep(wait)
 
-    print("❌ Overpass permanently failed.")
+    logger.error("Overpass API permanently failed after all retries")
     return {"elements": []}
 
 
@@ -115,13 +119,13 @@ def query_overpass_segmented(
     for i in range(0, len(query_points), points_per_batch):
         batches.append(query_points[i:i + points_per_batch])
 
-    print(f"🔍 Querying {total_track_length_km:.1f}km track with {len(batches)} batched Overpass calls")
-    print(f"   ({len(query_points)} search points, ~{points_per_batch} points per batch)")
+    logger.info(f"Querying {total_track_length_km:.1f}km track with {len(batches)} batched Overpass calls")
+    logger.info(f"Search points: {len(query_points)}, ~{points_per_batch} points per batch")
 
     all_elements = []
     seen_ids = set()
 
-    for batch_idx, batch_points in enumerate(tqdm(batches, desc="⏳ Overpass queries")):
+    for batch_idx, batch_points in enumerate(tqdm(batches, desc="Overpass queries")):
         query = build_overpass_query_batch(batch_points, radius_km, include_filters)
         data = query_overpass_with_retries(query, overpass_cfg)
 

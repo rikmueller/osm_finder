@@ -1,0 +1,22 @@
+services:
+  alonggpx:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: alonggpx-web
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_PORT=5000
+      # AlongGPX environment variables (override config.yaml)
+      #- ALONGGPX_PROJECT_NAME=WebProject
+    volumes:
+      # GPX input files (mount local data/input directory from parent)
+      - ../data/input:/app/data/input:ro
+      # Output directory for Excel and HTML results
+      - ../data/output:/app/data/output:rw
+      # Optional: mount config.yaml to override at runtime
+      - ../config.yaml:/app/config.yaml:ro
+    restart: unless-stopped
+    # Resource limits (adjust as needed)y

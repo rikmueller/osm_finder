@@ -4,16 +4,18 @@
 
 ## 🎯 What It Does
 
-You provide a GPX track (from your bike computer, phone, or mapping app). AlongGPX queries OpenStreetMap for everything you're looking for nearby:
+You provide a GPX track (from your bike computer, phone, or mapping app). AlongGPX queries OpenStreetMap for everything you're looking for nearby.
+
+It creates:
 - **Excel spreadsheet** with names, contact info, opening hours, distances
 - **Interactive map** with color-coded markers showing each POI type
 
 Perfect for trip planning: bikepacking, hiking, road trips, or any adventure where you need to know what's nearby.
 
 ## 🚀 Get Started
-
-- CLI quickstart → [docs/quickstart-cli.md](docs/quickstart-cli.md)
-- Docker quickstart → [docs/quickstart-docker.md](docs/quickstart-docker.md)
+AlongGPX comes in two flavours:
+- CLI (Python) → [docs/quickstart-cli.md](docs/quickstart-cli.md)
+- REST API (Docker) → [docs/quickstart-docker.md](docs/quickstart-docker.md)
 
 ## 📁 Project Structure
 

@@ -1,6 +1,6 @@
 # Quickstart (Docker)
 
-Run AlongGPX as a web API with Docker and Docker Compose in ~2 minutes.
+Run AlongGPX as a REST API with Docker and Docker Compose in ~2 minutes.
 
 ## Prerequisites
 - Git (to clone the repository)
@@ -88,7 +88,7 @@ services:
 
 When form parameters are provided in `/api/process`, `config.yaml:search.include/exclude` are ignored (request takes precedence).
 
-| config.yaml Key | Env Variable | Web API Parameter | Purpose |
+| config.yaml Key | Env Variable | REST API Parameter | Purpose |
 |------------|--------------|-------------------|---------|
 | `project.name` | `ALONGGPX_PROJECT_NAME` | `project_name` | Output filename prefix and project identifier |
 | `project.output_path` | `ALONGGPX_OUTPUT_PATH` | — | Directory for Excel and HTML outputs |
@@ -167,4 +167,4 @@ server {
 ## Next Steps
 - Adjust defaults in `config.yaml`
 - Explore or add presets in `presets.yaml`
-- For deeper API details, see `docs/DOCKER.md`
+

@@ -11,7 +11,6 @@ services:
       # AlongGPX environment variables (override config.yaml)
       #- ALONGGPX_PROJECT_NAME=WebProject
       #- ALONGGPX_RADIUS_KM=5
-      #- ALONGGPX_BATCH_KM=50
     volumes:
       # GPX input files (mount local data/input directory from parent)
       - ../data/input:/app/data/input:ro

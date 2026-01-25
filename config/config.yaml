@@ -4,8 +4,6 @@ project:
   # Directory where output files will be saved
   output_path: "./data/output/"
   # Timezone for file timestamps (e.g., "Europe/Berlin", "UTC", "America/New_York")
-  # Set via environment variable: ALONGGPX_TIMEZONE
-  # See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   timezone: "Europe/Berlin"
 
 input:
@@ -16,15 +14,15 @@ search:
   # Search radius in kilometers around each track segment
   radius_km: 5
   # Distance between Overpass query points along the track (in km)
-  # Set to null to auto-calculate as 60% of radius_km (highly suggested)
+  # Set to null to auto-calculate as 60% of radius_km (don´t change unless you know what you´re doing)
   step_km: null
   # OSM tags to search for (include filters)
-  include:
-    - "tourism=camp_site"
+  #include:
+  #  - "tourism=camp_site"
   # OSM tags to exclude from results (exclude filters)
-  exclude:
-    - "tents=no"
-    - "camp_site:tent=no"
+  #exclude:
+  #  - "tents=no"
+  #  - "camp_site:tent=no"
 
 map:
   # Initial zoom level for the Folium map (1-18)

@@ -46,12 +46,46 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
   }
 
   const handlePresetToggle = (preset: string) => {
-    const updated = settings.presets.includes(preset)
+    const presetDetail = config.presets_detail[preset]
+    if (!presetDetail) {
+      console.error(`Preset '${preset}' not found in presets_detail`)
+      return
+    }
+
+    const isSelected = settings.presets.includes(preset)
+    const presetIncludes = presetDetail.include || []
+    const presetExcludes = presetDetail.exclude || []
+
+    let newIncludes = [...settings.includes]
+    let newExcludes = [...settings.excludes]
+
+    if (isSelected) {
+      // Remove filters contributed by this preset (simple string match)
+      newIncludes = newIncludes.filter((f) => !presetIncludes.includes(f))
+      newExcludes = newExcludes.filter((f) => !presetExcludes.includes(f))
+    } else {
+      // Add filters from preset, avoiding duplicates
+      presetIncludes.forEach((f) => {
+        if (!newIncludes.includes(f)) {
+          newIncludes.push(f)
+        }
+      })
+      presetExcludes.forEach((f) => {
+        if (!newExcludes.includes(f)) {
+          newExcludes.push(f)
+        }
+      })
+    }
+
+    const updatedPresets = isSelected
       ? settings.presets.filter((p) => p !== preset)
       : [...settings.presets, preset]
+
     onChange({
       ...settings,
-      presets: updated,
+      presets: updatedPresets,
+      includes: newIncludes,
+      excludes: newExcludes,
     })
   }
 
@@ -98,13 +132,18 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
         <div className="preset-grid">
           {config.presets.map((preset) => (
             <label key={preset} className="preset-chip">
-              <input
-                type="checkbox"
-                checked={settings.presets.includes(preset)}
-                onChange={() => handlePresetToggle(preset)}
-                disabled={isProcessing}
-              />
-              <span>{preset}</span>
+              <div className="preset-chip-header">
+                <input
+                  type="checkbox"
+                  checked={settings.presets.includes(preset)}
+                  onChange={() => handlePresetToggle(preset)}
+                  disabled={isProcessing}
+                />
+                <span className="preset-name">{preset}</span>
+              </div>
+              {config.presets_detail[preset]?.info && (
+                <span className="preset-info">{config.presets_detail[preset]?.info}</span>
+              )}
             </label>
           ))}
         </div>

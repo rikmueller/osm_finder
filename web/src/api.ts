@@ -13,6 +13,7 @@ export interface ConfigResponse {
   presets: string[]
   presets_detail: {
     [key: string]: {
+      info?: string
       include: string[]
       exclude: string[]
     }
@@ -44,8 +45,7 @@ export const apiClient = {
     projectName: string,
     radiusKm: number,
     includes: string[],
-    excludes: string[],
-    presets: string[]
+    excludes: string[]
   ): Promise<{ job_id: string; status_url: string }> {
     const formData = new FormData()
     formData.append('file', file)
@@ -53,7 +53,6 @@ export const apiClient = {
     formData.append('radius_km', radiusKm.toString())
     includes.forEach((inc) => formData.append('include', inc))
     excludes.forEach((exc) => formData.append('exclude', exc))
-    presets.forEach((preset) => formData.append('preset', preset))
 
     const response = await axios.post(`${API_BASE}/process`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },

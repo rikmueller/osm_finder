@@ -112,6 +112,10 @@ def load_and_merge_config(config_path: str, args) -> dict:
     Precedence (highest to lowest): CLI args > env vars > YAML defaults
     """
     cfg = load_yaml_config(config_path)
+    # Ensure optional search filters exist
+    cfg.setdefault("search", {})
+    cfg["search"].setdefault("include", [])
+    cfg["search"].setdefault("exclude", [])
     
     # Apply environment variables first
     env_cfg = load_env_config()

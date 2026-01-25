@@ -1,5 +1,6 @@
 presets:
   camp_basic:
+    info: "Find campsites that allow tent camping"
     include:
       - "tourism=camp_site"
     exclude:
@@ -7,6 +8,7 @@ presets:
       - "camp_site:tent=no"
 
   camp_and_caravan:
+    info: "Find campsites and caravan sites including tent camping"
     include:
       - "tourism=camp_site"
       - "tourism=caravan_site"
@@ -14,23 +16,28 @@ presets:
       - "tents=no"
 
   wild_camping_spots:
+    info: "Find designated wild camping spots"
     include:
       - "camp_site=wild"
 
   shelters:
+    info: "Find shelters for overnight stays or weather protection"
     include:
       - "amenity=shelter"
 
   hotel:
+    info: "Find hotels along the route"
     include:
       - "tourism=hotel"
 
   accommodation:
+    info: "Find all types of commercial accommodation (hotels, guest houses, B&Bs)"
     include:
       - "tourism=hotel"
       - "tourism=guest_house"
       - "tourism=bed_and_breakfast"
 
   drinking_water:
+    info: "Find drinking water sources"
     include:
       - "amenity=drinking_water"

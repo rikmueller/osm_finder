@@ -173,6 +173,10 @@ def process_gpx():
         config = load_yaml_config(config_path)
         env_cfg = load_env_config()
         config = merge_env_into_config(config, env_cfg)
+        # Ensure optional search filters exist even if omitted in YAML
+        config.setdefault('search', {})
+        config['search'].setdefault('include', [])
+        config['search'].setdefault('exclude', [])
         if 'project_name' in request.form:
             config['project']['name'] = request.form['project_name']
         else:

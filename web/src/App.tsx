@@ -101,6 +101,22 @@ function App() {
       return
     }
 
+    if ((settings.includes || []).length === 0) {
+      setState((prev) => ({
+        ...prev,
+        error: 'Please add at least one include filter (select a preset or add a custom include).',
+      }))
+      return
+    }
+
+    if (!settings.projectName || settings.projectName.trim() === '') {
+      setState((prev) => ({
+        ...prev,
+        error: 'Please provide a project name before generating.',
+      }))
+      return
+    }
+
     try {
       setState((prev) => ({
         ...prev,
@@ -113,8 +129,7 @@ function App() {
         settings.projectName,
         settings.radiusKm,
         settings.includes,
-        settings.excludes,
-        settings.presets
+        settings.excludes
       )
 
       setState((prev) => ({

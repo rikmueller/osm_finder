@@ -105,12 +105,16 @@
   padding: 10px 12px;
   border-radius: 10px;
   margin-bottom: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .alert-warning {
   background: #fffbeb;
   color: #92400e;
   border: 1px solid #fde68a;
+  font-size: clamp(11px, 2.5vw, 14px);
 }
 
 .alert-error {

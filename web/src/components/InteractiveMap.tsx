@@ -152,6 +152,9 @@ export default function InteractiveMap({ track, pois, tileSource, tileOptions, o
                   <div style={{ fontSize: '0.9em', marginTop: '2px' }}>
                     {poi.kilometersFromStart?.toFixed(1)} km from start
                   </div>
+                  <div style={{ fontSize: '0.8em', marginTop: '4px', fontStyle: 'italic', opacity: 0.8 }}>
+                    Click for more details
+                  </div>
                 </div>
               </Tooltip>
               <Popup maxWidth={300}>

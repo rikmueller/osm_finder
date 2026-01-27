@@ -109,24 +109,30 @@ function computePadding() {
   return { padTop, padLeft, padRight, padBottom, occLeft, occRight }
 }
 
-function FitBounds({ track }: { track: [number, number][] }) {
+function FitBounds({ track, pois }: { track: [number, number][]; pois: MapPoi[] }) {
   const map = useMap()
 
   const userMovedRef = useRef(false)
-  const lastTrackSigRef = useRef('')
+  const lastSigRef = useRef('')
 
-  const trackSignature = useMemo(() => {
-    if (!track.length) return ''
-    const first = track[0]
-    const last = track[track.length - 1]
-    return `${track.length}:${first?.join(',')}:${last?.join(',')}`
-  }, [track])
+  const signature = useMemo(() => {
+    const tLen = track.length
+    const pLen = pois.length
+    if (!tLen && !pLen) return ''
+    const tFirst = tLen ? track[0] : []
+    const tLast = tLen ? track[tLen - 1] : []
+    const pFirst = pLen ? pois[0].coords : []
+    const pLast = pLen ? pois[pLen - 1].coords : []
+    return `${tLen}:${tFirst?.join(',')}:${tLast?.join(',')}:${pLen}:${pFirst?.join(',')}:${pLast?.join(',')}`
+  }, [track, pois])
 
   const refit = (opts?: { force?: boolean }) => {
     if (userMovedRef.current && !opts?.force) return
-    if (track.length === 0) return
-    const latLngs = track.map(([lon, lat]) => [lat, lon] as [number, number])
-    const bounds = L.latLngBounds(latLngs as L.LatLngExpression[])
+    const points: [number, number][] = []
+    track.forEach(([lon, lat]) => points.push([lat, lon]))
+    pois.forEach((p) => points.push([p.coords[1], p.coords[0]]))
+    if (!points.length) return
+    const bounds = L.latLngBounds(points as L.LatLngExpression[])
     const { padTop, padLeft, padRight, padBottom } = computePadding()
 
     // Run after layout to ensure Leaflet has correct container size
@@ -137,13 +143,13 @@ function FitBounds({ track }: { track: [number, number][] }) {
         paddingBottomRight: [padRight, padBottom],
         animate: false,
       })
-      lastTrackSigRef.current = trackSignature
+      lastSigRef.current = signature
     })
   }
 
   useEffect(() => {
     // Fit only when a new track arrives
-    if (trackSignature && trackSignature !== lastTrackSigRef.current) {
+    if (signature && signature !== lastSigRef.current) {
       userMovedRef.current = false
       refit({ force: true })
     }
@@ -158,18 +164,22 @@ function FitBounds({ track }: { track: [number, number][] }) {
       map.off('zoomstart', onZoomStart)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trackSignature, map])
+  }, [signature, map])
   return null
 }
 
-function RecenterButton({ track }: { track: [number, number][] }) {
+function RecenterButton({ track, pois }: { track: [number, number][]; pois: MapPoi[] }) {
   const map = useMap()
   const hasTrack = track.length > 0
+  const hasPois = pois.length > 0
+  const hasAny = hasTrack || hasPois
 
   const handleRecenter = () => {
-    if (!hasTrack) return
-    const latLngs = track.map(([lon, lat]) => [lat, lon] as [number, number])
-    const bounds = L.latLngBounds(latLngs as L.LatLngExpression[])
+    if (!hasAny) return
+    const points: [number, number][] = []
+    track.forEach(([lon, lat]) => points.push([lat, lon]))
+    pois.forEach((p) => points.push([p.coords[1], p.coords[0]]))
+    const bounds = L.latLngBounds(points as L.LatLngExpression[])
     const { padTop, padLeft, padRight, padBottom } = computePadding()
 
     map.invalidateSize()
@@ -184,9 +194,9 @@ function RecenterButton({ track }: { track: [number, number][] }) {
     <button
       className="recenter-control"
       onClick={handleRecenter}
-      title={hasTrack ? 'Recenter to track' : 'Load a track to recenter'}
-      aria-label="Recenter to track"
-      disabled={!hasTrack}
+      title={hasAny ? 'Recenter to data' : 'Load data to recenter'}
+      aria-label="Recenter to data"
+      disabled={!hasAny}
     >
       <Navigation size={18} />
     </button>
@@ -330,9 +340,9 @@ export default function InteractiveMap({ track, pois, tileSource, tileOptions, o
             </Marker>
           )
         })}
-        <FitBounds track={track} />
+        <FitBounds track={track} pois={pois} />
         <LocateButton />
-        <RecenterButton track={track} />
+        <RecenterButton track={track} pois={pois} />
         <TileSelector tileOptions={tileOptions} value={tileSource.id} onChange={onTileChange} />
       </MapContainer>
     </div>

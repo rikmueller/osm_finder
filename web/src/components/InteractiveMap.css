@@ -15,7 +15,8 @@
   right: auto !important;
 }
 
-.locate-control {
+.locate-control,
+.recenter-control {
   position: absolute;
   top: 92px; /* safely below the stacked zoom buttons */
   left: 10px;
@@ -33,15 +34,28 @@
   transition: background 0.15s ease, box-shadow 0.15s ease;
 }
 
-.locate-control:hover {
+.locate-control:not(:disabled):hover,
+.recenter-control:not(:disabled):hover {
   background: #f5f6f7;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
 }
 
-.locate-control svg {
+.locate-control svg,
+.recenter-control svg {
   stroke: #2c3e50;
   width: 18px;
   height: 18px;
+}
+
+.recenter-control {
+  top: 176px; /* below tile selector */
+}
+
+.recenter-control:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  background: #f9fafb;
 }
 
 .tile-control-wrapper {

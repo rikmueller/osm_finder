@@ -3,7 +3,7 @@ import { MapContainer, Marker, Polyline, Popup, TileLayer, Tooltip, useMap } fro
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './InteractiveMap.css'
-import { Crosshair, Layers } from 'lucide-react'
+import { Crosshair, Layers, Navigation } from 'lucide-react'
 
 export type TileSource = {
   id: string
@@ -48,72 +48,69 @@ function createColoredIcon(color: string) {
   })
 }
 
-function FitBounds({ track }: { track: [number, number][] }) {
-  const map = useMap()
+function computePadding() {
+  const base = 24
+  let padTop = base
+  let padLeft = base
+  let padRight = base
+  let padBottom = base
+  let occLeft = 0
+  let occRight = 0
 
-  // Compute dynamic padding to respect visible UI overlays (e.g., side/bottom sheet)
-  const computePadding = () => {
-    const base = 24
-    let padTop = base
-    let padLeft = base
-    let padRight = base
-    let padBottom = base
-    let occLeft = 0
-    let occRight = 0
+  if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+    const vpW = window.innerWidth
+    const vpH = window.innerHeight
 
-    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-      const vpW = window.innerWidth
-      const vpH = window.innerHeight
+    const sheets = Array.from(document.querySelectorAll('.sheet')) as HTMLElement[]
+    let maxLeft = 0
+    let maxRight = 0
+    let maxTop = 0
+    let maxBottom = 0
 
-      const sheets = Array.from(document.querySelectorAll('.sheet')) as HTMLElement[]
-      let maxLeft = 0
-      let maxRight = 0
-      let maxTop = 0
-      let maxBottom = 0
+    for (const sheet of sheets) {
+      const rect = sheet.getBoundingClientRect()
+      const interW = Math.max(0, Math.min(rect.right, vpW) - Math.max(rect.left, 0))
+      const interH = Math.max(0, Math.min(rect.bottom, vpH) - Math.max(rect.top, 0))
+      const visW = Math.min(rect.width, interW)
+      const visH = Math.min(rect.height, interH)
 
-      for (const sheet of sheets) {
-        const rect = sheet.getBoundingClientRect()
-        // Visible intersection with viewport (clamped by actual size)
-        const interW = Math.max(0, Math.min(rect.right, vpW) - Math.max(rect.left, 0))
-        const interH = Math.max(0, Math.min(rect.bottom, vpH) - Math.max(rect.top, 0))
-        const visW = Math.min(rect.width, interW)
-        const visH = Math.min(rect.height, interH)
+      const isVisible = rect.right > 0 && rect.bottom > 0 && rect.left < vpW && rect.top < vpH
+      if (!isVisible) continue
 
-        const isVisible = rect.right > 0 && rect.bottom > 0 && rect.left < vpW && rect.top < vpH
-        if (!isVisible) continue
+      const distLeft = Math.max(0, rect.left)
+      const distRight = Math.max(0, vpW - rect.right)
+      const distTop = Math.max(0, rect.top)
+      const distBottom = Math.max(0, vpH - rect.bottom)
+      const minDist = Math.min(distLeft, distRight, distTop, distBottom)
 
-        // Determine nearest edge; treat as anchored to that edge
-        const distLeft = Math.max(0, rect.left)
-        const distRight = Math.max(0, vpW - rect.right)
-        const distTop = Math.max(0, rect.top)
-        const distBottom = Math.max(0, vpH - rect.bottom)
-        const minDist = Math.min(distLeft, distRight, distTop, distBottom)
-
-        if (minDist === distLeft && visW > 0) {
-          maxLeft = Math.max(maxLeft, visW)
-        } else if (minDist === distRight && visW > 0) {
-          maxRight = Math.max(maxRight, visW)
-        } else if (minDist === distTop && visH > 0) {
-          maxTop = Math.max(maxTop, visH)
-        } else if (minDist === distBottom && visH > 0) {
-          maxBottom = Math.max(maxBottom, visH)
-        }
+      if (minDist === distLeft && visW > 0) {
+        maxLeft = Math.max(maxLeft, visW)
+      } else if (minDist === distRight && visW > 0) {
+        maxRight = Math.max(maxRight, visW)
+      } else if (minDist === distTop && visH > 0) {
+        maxTop = Math.max(maxTop, visH)
+      } else if (minDist === distBottom && visH > 0) {
+        maxBottom = Math.max(maxBottom, visH)
       }
-
-      if (maxLeft > 0) {
-        padLeft += maxLeft
-        occLeft += maxLeft
-      }
-      if (maxRight > 0) {
-        padRight += maxRight
-        occRight += maxRight
-      }
-      if (maxTop > 0) padTop += maxTop
-      if (maxBottom > 0) padBottom += maxBottom
     }
 
-    return { padTop, padLeft, padRight, padBottom, occLeft, occRight }
+    if (maxLeft > 0) {
+      padLeft += maxLeft
+      occLeft += maxLeft
+    }
+    if (maxRight > 0) {
+      padRight += maxRight
+      occRight += maxRight
+    }
+    if (maxTop > 0) padTop += maxTop
+    if (maxBottom > 0) padBottom += maxBottom
   }
+
+  return { padTop, padLeft, padRight, padBottom, occLeft, occRight }
+}
+
+function FitBounds({ track }: { track: [number, number][] }) {
+  const map = useMap()
 
   const userMovedRef = useRef(false)
   const lastTrackSigRef = useRef('')
@@ -163,6 +160,37 @@ function FitBounds({ track }: { track: [number, number][] }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trackSignature, map])
   return null
+}
+
+function RecenterButton({ track }: { track: [number, number][] }) {
+  const map = useMap()
+  const hasTrack = track.length > 0
+
+  const handleRecenter = () => {
+    if (!hasTrack) return
+    const latLngs = track.map(([lon, lat]) => [lat, lon] as [number, number])
+    const bounds = L.latLngBounds(latLngs as L.LatLngExpression[])
+    const { padTop, padLeft, padRight, padBottom } = computePadding()
+
+    map.invalidateSize()
+    map.fitBounds(bounds, {
+      paddingTopLeft: [padLeft, padTop],
+      paddingBottomRight: [padRight, padBottom],
+      animate: true,
+    })
+  }
+
+  return (
+    <button
+      className="recenter-control"
+      onClick={handleRecenter}
+      title={hasTrack ? 'Recenter to track' : 'Load a track to recenter'}
+      aria-label="Recenter to track"
+      disabled={!hasTrack}
+    >
+      <Navigation size={18} />
+    </button>
+  )
 }
 
 function LocateButton() {
@@ -304,6 +332,7 @@ export default function InteractiveMap({ track, pois, tileSource, tileOptions, o
         })}
         <FitBounds track={track} />
         <LocateButton />
+        <RecenterButton track={track} />
         <TileSelector tileOptions={tileOptions} value={tileSource.id} onChange={onTileChange} />
       </MapContainer>
     </div>

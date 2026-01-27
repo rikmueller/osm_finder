@@ -160,12 +160,10 @@ export default function SettingsSheet({
         <section className="sheet-section">
           <div className="section-head">
             <h3>Presets</h3>
-            <div className="section-actions">
-              {settings.presets.length === 0 && <span className="muted">No presets selected</span>}
-              <button className="ghost" onClick={onOpenPresetModal}>
-                +
-              </button>
-            </div>
+            <button className="add-btn" onClick={onOpenPresetModal} title="Add presets">
+              +
+            </button>
+            {settings.presets.length === 0 && <span className="muted">No presets selected</span>}
           </div>
           <div className="chips">
             {settings.presets.map((p) => (
@@ -187,12 +185,10 @@ export default function SettingsSheet({
         <section className="sheet-section">
           <div className="section-head">
             <h3>Include filters</h3>
-            <div className="section-actions">
-              {settings.includes.length === 0 && <span className="muted">No include filters</span>}
-              <button className="ghost" onClick={onOpenIncludeModal}>
-                +
-              </button>
-            </div>
+            <button className="add-btn" onClick={onOpenIncludeModal} title="Add include filters">
+              +
+            </button>
+            {settings.includes.length === 0 && <span className="muted">No include filters</span>}
           </div>
           <div className="chips">
             {settings.includes.map((f) => (
@@ -214,12 +210,10 @@ export default function SettingsSheet({
         <section className="sheet-section">
           <div className="section-head">
             <h3>Exclude filters</h3>
-            <div className="section-actions">
-              {settings.excludes.length === 0 && <span className="muted">No exclude filters</span>}
-              <button className="ghost" onClick={onOpenExcludeModal}>
-                +
-              </button>
-            </div>
+            <button className="add-btn" onClick={onOpenExcludeModal} title="Add exclude filters">
+              +
+            </button>
+            {settings.excludes.length === 0 && <span className="muted">No exclude filters</span>}
           </div>
           <div className="chips">
             {settings.excludes.map((f) => (

@@ -105,9 +105,9 @@
   padding: 10px 12px;
   border-radius: 10px;
   margin-bottom: 12px;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 .alert-warning {
@@ -121,6 +121,7 @@
   background: #fef2f2;
   color: var(--color-error);
   border: 1px solid #fecdd3;
+  font-size: clamp(11px, 2.5vw, 14px);
 }
 
 .sheet-section {

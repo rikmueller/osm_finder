@@ -315,7 +315,7 @@ function TileSelector({ tileOptions, value, onChange }: { tileOptions: TileSourc
 }
 
 export default function InteractiveMap({ track, pois, tileSource, tileOptions, onTileChange }: Props) {
-  const [initialCenter, setInitialCenter] = useState<[number, number]>([49.0069, 8.4037]) // fallback Karlsruhe
+  const initialCenter: [number, number] = [49.0069, 8.4037] // fallback Karlsruhe
 
   // Automatic geolocation detection disabled to prevent browser popup
   // Users can still manually click the locate button on the map if desired

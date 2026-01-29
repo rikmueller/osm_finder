@@ -58,7 +58,7 @@
     border-radius: 0;
     /* Use element-relative translation so it fully leaves the viewport on mobile (avoids 100vh quirks) */
     transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0s 0.3s;
     z-index: 190;
     visibility: hidden;
     display: flex;
@@ -70,12 +70,27 @@
   .sheet.open {
     transform: translateY(0);
     visibility: visible;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0s 0s;
   }
 
   .sheet.closed {
     transform: translateY(100%);
     pointer-events: none;
     visibility: hidden;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0s 0.3s;
+  }
+  
+  /* Hide content during closing animation to prevent artifacts */
+  .sheet.closed .sheet-content,
+  .sheet.closed .sheet-mobile-header {
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
+  }
+  
+  .sheet.open .sheet-content,
+  .sheet.open .sheet-mobile-header {
+    opacity: 1;
+    transition: opacity 0.2s ease-in 0.1s;
   }
 
   /* Mobile header bar */

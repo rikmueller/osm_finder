@@ -9,8 +9,8 @@ Run AlongGPX locally via the command line in about 5 minutes.
 
 ## 0) Clone the Repository
 ```bash
-git clone https://github.com/rikmueller/AlongGPX.git
-cd AlongGPX
+git clone https://github.com/rikmueller/along-gpx.git
+cd along-gpx
 ```
 
 ## 1) Create a Virtual Environment (Recommended)
@@ -25,7 +25,7 @@ source venv/bin/activate
 
 Windows (PowerShell):
 ```powershell
-cd AlongGPX
+cd along-gpx
 python -m venv venv
 venv\Scripts\Activate.ps1
 ```

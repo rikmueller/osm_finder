@@ -9,8 +9,8 @@ Run AlongGPX as a REST API with Docker and Docker Compose in ~2 minutes.
 
 ## 0) Clone the Repository
 ```bash
-git clone https://github.com/rikmueller/AlongGPX.git
-cd AlongGPX
+git clone https://github.com/rikmueller/along-gpx.git
+cd along-gpx
 ```
 
 ## 1) Start the Container

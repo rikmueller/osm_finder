@@ -22,17 +22,21 @@ AlongGPX comes in three flavours:
 
 ```
 AlongGPX/
+├── web/                    # React frontend (modern web UI)
+│   ├── src/
+│   │   ├── DevApp.tsx     # Main application
+│   │   ├── api.ts         # API client with TypeScript types
+│   │   ├── components/    # UI components
+│   │   └── hooks/         # Custom React hooks (WebSocket)
+│   ├── package.json       # Frontend dependencies
+│   └── vite.config.ts     # Build configuration
+├── backend/                # Flask REST API
+│   ├── app.py             # API endpoints + job management
+│   └── requirements.txt   # Backend dependencies
 ├── cli/                    # Command-line interface
 │   ├── main.py            # CLI entry point
-│   └── .env.example       # CLI environment template
-├── docker/                 # Docker/Web application
-│   ├── app.py             # Flask REST API
-│   ├── Dockerfile         # Docker build configuration
-│   ├── docker-compose.yml # Container orchestration
-│   ├── requirements-web.txt # Web dependencies
-│   └── .env.example       # Web environment template
+│   └── requirements-cli.txt
 ├── core/                   # Shared pipeline modules
-│   ├── cli.py             # Argument parsing
 │   ├── config.py          # Configuration management
 │   ├── presets.py         # Filter presets
 │   ├── gpx_processing.py  # GPX parsing and metrics
@@ -40,15 +44,22 @@ AlongGPX/
 │   ├── filtering.py       # Result filtering
 │   ├── export.py          # Excel export
 │   └── folium_map.py      # Map generation
-├── docs/                   # Documentation
-│   ├── quickstart-cli.md  # CLI setup guide
-│   └── quickstart-docker.md # Docker setup guide
+├── docker/                 # Production deployment
+│   ├── docker-compose.yml # Container orchestration
+│   ├── Dockerfile         # Backend container
+│   ├── Dockerfile.nginx   # Frontend + Nginx
+│   └── nginx.conf         # Reverse proxy config
+├── config/                 # Shared configuration
+│   ├── config.yaml        # Defaults
+│   └── presets.yaml       # Filter presets
 ├── data/
-│   ├── input/              # GPX files (default)
+│   ├── input/              # GPX files
 │   └── output/             # Generated results
-├── config.yaml            # Shared configuration
-├── presets.yaml           # Filter presets
-└── README.md              # This file
+└── docs/                   # Documentation
+    ├── QUICKSTART-FRONTEND.md
+    ├── FRONTEND.md
+    ├── quickstart-cli.md
+    └── quickstart-docker.md
 ```
 
 ## Configuration Files
@@ -59,16 +70,20 @@ AlongGPX/
 | [presets.yaml](presets.yaml) | Pre-built filter profiles (camp_basic, drinking_water, shelters, etc.) |
 
 ## Features
-- Read GPX tracks and compute total distance
-- Run segmented Overpass queries along the track
-- Use flexible OSM include and exclude filters
-- Use preset filter profiles for common search types
-- Validate filters automatically
-- Export all results to Excel with matching filter information
-- Generate an interactive Folium map with color-coded markers by filter type
-- Fully configurable through YAML and command line arguments
+- **Modern web UI** with real-time interactive map visualization
+- **Instant GPX track preview** upon upload - see your route immediately
+- **Mobile-responsive design** with collapsible settings panel
+- **Real-time progress updates** via WebSocket (with polling fallback)
+- **Advanced filter management** with preset categories and custom filters
+- **Live POI markers** appearing on map as processing completes
+- Multiple map tile layers (OpenStreetMap, OpenTopoMap, CyclOSM)
+- Color-coded markers by filter type with custom icons
+- Export results to Excel with distances and contact information
+- Download interactive Folium maps with start/stop markers
+- Flexible OSM include/exclude filters with validation
+- Preset filter profiles for common search types (camping, water, food, shops)
 - Accurate WGS84 geodesic distance calculations
-- **CLI and Web API modes** for different use cases
+- **CLI, Web UI, and REST API modes** for different workflows
 
 
 ## Architecture

@@ -33,25 +33,31 @@ This document describes the new web frontend for AlongGPX and how it integrates 
 ```
 web/
 ├── src/
-│   ├── main.tsx              # Entry point
-│   ├── App.tsx               # Main app orchestrator
-│   ├── App.css               # Layout styles
-│   ├── index.css             # Global styles
-│   ├── api.ts                # API client & types
-│   └── components/
-│       ├── UploadArea.tsx     # GPX file upload with drag-drop
-│       ├── UploadArea.css
-│       ├── SettingsForm.tsx   # Project settings & filters
-│       ├── SettingsForm.css
-│       ├── ProgressCard.tsx   # Real-time progress display
-│       ├── ProgressCard.css
-│       ├── ResultsPanel.tsx   # Results + download links
-│       └── ResultsPanel.css
+│   ├── main.tsx              # Entry point with React Router
+│   ├── DevApp.tsx            # Main app orchestrator
+│   ├── DevApp.css            # Dark theme layout styles
+│   ├── index.css             # Global design system
+│   ├── api.ts                # API client & TypeScript types
+│   ├── components/
+│   │   ├── DevHeader.tsx         # Glassmorphic header with branding
+│   │   ├── DevHeader.css
+│   │   ├── SettingsSheet.tsx     # Collapsible settings sidebar (mobile-responsive)
+│   │   ├── SettingsSheet.css
+│   │   ├── InteractiveDevMap.tsx # React-Leaflet map with custom markers
+│   │   ├── InteractiveDevMap.css
+│   │   ├── PresetSelectionModal.tsx # Category-organized preset selection
+│   │   ├── PresetSelectionModal.css
+│   │   ├── FilterSelectionModal.tsx # Custom filter builder
+│   │   ├── FilterSelectionModal.css
+│   │   ├── Modal.tsx             # Reusable modal base component
+│   │   └── Modal.css
+│   └── hooks/
+│       └── useWebSocket.ts       # WebSocket hook for real-time updates
 ├── index.html                # HTML template
-├── package.json              # Dependencies
-├── vite.config.ts            # Vite configuration
+├── package.json              # Dependencies (react-router, leaflet, socket.io-client)
+├── vite.config.ts            # Vite configuration with proxy
 ├── tsconfig.json             # TypeScript config
-└── Dockerfile                # Docker image definition
+└── Dockerfile                # Frontend build image
 ```
 
 ## Backend Integration
@@ -125,27 +131,54 @@ Thread-safe updates via `job_registry_lock` prevent race conditions.
 
 ## Frontend Workflow
 
-### 1. **Idle Stage** (User uploads & configures)
-   - Load config via `/api/config` → populate defaults
-   - Accept GPX file via drag-drop
-   - Adjust settings (radius, include/exclude filters, presets)
-   - Click "Generate" button
+### Modern Continuous Experience
 
-### 2. **Processing Stage** (Async job running)
+The DevApp provides a **map-first interface** where users see their GPX track immediately upon upload, with settings available in a collapsible side panel.
+
+### 1. **Idle Stage** (Initial load)
+   - Load config via `/api/config` → populate defaults and presets
+   - Display empty interactive map ready for GPX upload
+   - Settings sheet collapsed on mobile, expanded on desktop
+
+### 2. **Uploaded Stage** (GPX loaded)
+   - User drags/drops GPX file or clicks to browse
+   - **Instant client-side parsing** using browser DOMParser
+   - GPX track appears immediately on map (blue line)
+   - Start (green) and stop (red) markers added
+   - Map auto-centers to track bounds
+   - User adjusts settings:
+     - Project name
+     - Search radius (km)
+     - Select presets from category-organized modal
+     - Add custom filters via filter builder
+     - Remove individual filters or entire presets
+   - Click "Generate Results" button
+
+### 3. **Processing Stage** (Async job running)
    - POST to `/api/process` → get job_id
-   - Poll `/api/status/<job_id>` every 1s
-   - Show progress bar + status message
-   - Display summary stats when available
+   - Real-time updates via WebSocket (fallback to polling)
+   - Progress bar updates smoothly (0-100%)
+   - Status messages show pipeline steps
+   - **POI markers appear live** on map as results arrive
+   - Color-coded by filter rank (1st=red, 2nd=orange, etc.)
+   - Settings sheet auto-closes on mobile after start
 
-### 3. **Results Stage** (Job completed)
-   - Show success card with POI count & track length
-   - Button to open Folium map in new tab
-   - Button to download Excel file
-   - "Process Another Track" button to reset
+### 4. **Completed Stage** (Job finished)
+   - All POI markers displayed with tooltips
+   - Click markers for detailed popups:
+     - Name, distance from start, distance from track
+     - Website, phone, opening hours
+     - OSM tags
+   - Success message with POI count & track length
+   - Download buttons for Excel and Folium HTML map
+   - "Reset" button to clear and start new search
+   - Map remains interactive (zoom, pan, layer switching)
 
-### 4. **Error Stage** (Job failed)
-   - Show error message from backend
-   - "Try Again" button to reset
+### 5. **Error Stage** (Job failed)
+   - Error message displayed prominently
+   - Map and uploaded track remain visible
+   - "Reset" button to clear and try again
+   - User can adjust settings without re-uploading
 
 ## Running Locally
 

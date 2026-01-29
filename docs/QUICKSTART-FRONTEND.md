@@ -4,13 +4,17 @@ This guide covers setting up and running the new web frontend.
 
 ## What's New?
 
-✨ **Complete web interface for AlongGPX** featuring:
+✨ **Modern map-first web interface for AlongGPX** featuring:
+- 🗺️ **Instant GPX track visualization** - see your route immediately after upload
+- 📱 **Mobile-responsive design** with collapsible settings panel
+- 🎨 **Interactive map** with multiple tile layers (OSM, OpenTopoMap, CyclOSM)
+- 📍 **Live POI markers** appearing in real-time as processing completes
+- 🎯 **Color-coded markers** by filter type with custom start/stop icons
+- ⚙️ **Advanced filter management** with category-organized presets
+- ⚡ **Real-time updates** via WebSocket (with automatic polling fallback)
 - 📂 Drag-and-drop GPX file upload
-- ⚙️ Configurable search radius, presets, and filters
-- ⏳ Real-time progress tracking during processing
-- 🗺️ Interactive Folium map viewer
-- 📊 Excel export download
-- 🎨 Sleek, modern UI with responsive design
+- 📊 Excel export and interactive Folium map downloads
+- 🎨 Modern dark theme with glassmorphic design
 
 ## Quick Start
 
@@ -72,29 +76,52 @@ Both services will start automatically. Wait ~30 seconds for frontend to build.
 ## Usage Walkthrough
 
 ### 1. **Upload GPX File**
-   - Drag and drop a .gpx file onto the upload area, or click to browse
-   - File will appear with a ✓ checkmark
+   - Drag and drop a .gpx file onto the map area, or click "Upload GPX" button
+   - **Track appears instantly** on the interactive map (blue line)
+   - Start marker (green play icon) and stop marker (red stop icon) automatically added
+   - Map auto-centers to show entire track
+   - Track statistics displayed in settings panel
 
-### 2. **Configure Settings**
-   - **Project Name**: Name for output files
-   - **Search Radius**: Distance around each track point (1-50 km)
-   - **Presets**: Quick-select filter profiles (camp_basic, drinking_water, etc.)
-   - **Include Filters**: OSM tags to search for (e.g., `tourism=camp_site`)
-   - **Exclude Filters**: OSM tags to exclude (e.g., `tents=no`)
+### 2. **Configure Settings** (via collapsible side panel)
+   - **Project Name**: Name for output files (default: GPX filename)
+   - **Search Radius**: Distance around track to search (1-50 km, default: 5 km)
+   - **Presets**: Click "+ Add Presets" to open category-organized modal
+     - Camping, Accommodation, Amenities, Food, Shops categories
+     - Multiple presets can be selected
+     - Each preset shown as colored chip
+   - **Custom Filters**: Click "+ Add Custom Filter" to build OSM tag filters
+     - Key=value format (e.g., `amenity=restaurant`)
+     - Add to includes or excludes
+   - **Remove filters**: Click X on any chip to remove individual filter or entire preset
+     - Removing preset preserves its filters as manual selections
 
 ### 3. **Start Processing**
-   - Click **🚀 Generate** button
+   - Click **🚀 Generate Results** button
+   - Settings panel auto-collapses on mobile for better map view
    - Processing begins immediately
 
-### 4. **Monitor Progress**
-   - See real-time progress bar (0-100%)
-   - Current status message updates
-   - POI count appears when available
+### 4. **Watch Real-Time Progress**
+   - Progress bar animates smoothly (0-100%)
+   - Status messages update: "Querying Overpass", "Filtering results", etc.
+   - **POI markers appear live** on map as they're discovered
+   - Markers color-coded by filter rank:
+     - 1st filter = Red
+     - 2nd filter = Orange
+     - 3rd filter = Purple
+     - 4th+ filters cycle through palette
+   - Hover over markers for quick tooltips
 
-### 5. **View Results**
-   - **Open Map**: View all POIs on interactive Folium map
-   - **Download Excel**: Get detailed data table with all POI info
-   - **Process Another**: Start over with a new track
+### 5. **Explore Results**
+   - **Map interactions**:
+     - Click markers for detailed popups (name, distance, website, phone, hours)
+     - Switch tile layers (OSM, OpenTopoMap, CyclOSM) via layer control
+     - Use geolocation button to center on your position
+     - Scale control shows distance reference
+     - Recenter button fits all POIs and track in view
+   - **Downloads**:
+     - **Download Excel**: Detailed spreadsheet with all POI data
+     - **Download Map**: Standalone HTML Folium map
+   - **Reset**: Click "🔄 Reset" to clear everything and start new search
 
 ---
 

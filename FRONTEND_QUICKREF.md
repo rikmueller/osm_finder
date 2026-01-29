@@ -39,22 +39,32 @@ docker-compose up
 ## 📋 What Was Built
 
 ### Backend Changes
-- ✅ `/api/config` - Get defaults and presets
+- ✅ `/api/config` - Get defaults and presets with detailed info
 - ✅ `/api/process` - Async job submission (returns job_id)
 - ✅ `/api/status/{job_id}` - Poll job progress
+- ✅ `/api/job/{job_id}/geojson` - Get track + POIs as GeoJSON for map
 - ✅ Job registry with thread-safe updates
-- ✅ Background async processing
+- ✅ Background async processing with progress callbacks
+- ✅ WebSocket support (optional, with polling fallback)
 
-### Frontend (New)
-- ✅ **UploadArea**: Drag-and-drop GPX files
-- ✅ **SettingsForm**: Configure search radius, filters, presets
-- ✅ **ProgressCard**: Real-time progress with percentage
-- ✅ **ResultsPanel**: Download Excel, view Folium map
-- ✅ Error handling & state management
-- ✅ Responsive design (desktop & mobile)
+### Frontend (Modern Map-First UI)
+- ✅ **DevApp**: Main application with continuous map experience
+- ✅ **DevHeader**: Glassmorphic header with branding
+- ✅ **SettingsSheet**: Collapsible settings panel (mobile-responsive)
+- ✅ **InteractiveDevMap**: React-Leaflet map with real-time POI updates
+- ✅ **PresetSelectionModal**: Category-organized preset picker
+- ✅ **FilterSelectionModal**: Custom filter builder
+- ✅ **Modal**: Reusable modal base component
+- ✅ **useWebSocket hook**: Real-time progress via Socket.IO
+- ✅ Instant GPX visualization on upload (client-side parsing)
+- ✅ Color-coded markers by filter rank
+- ✅ Multiple tile layers with preference persistence
+- ✅ Mobile-first responsive design
+- ✅ Dark theme with modern aesthetics
 
 ### Docker
-- ✅ `web/Dockerfile` - Multi-stage React build
+- ✅ `docker/Dockerfile` - Backend container
+- ✅ `docker/Dockerfile.nginx` - Frontend static build + Nginx
 - ✅ `docker-compose.yml` - Production setup
 - ✅ `docker-compose.dev.yml` - Development with hot reload
 
@@ -66,36 +76,47 @@ docker-compose up
 ## 📁 New Files Summary
 
 ```
-web/                          NEW - React frontend
+web/                          React frontend (modern map UI)
 ├── src/
-│   ├── App.tsx               Main orchestrator
+│   ├── DevApp.tsx            Main application with map-first design
+│   ├── DevApp.css            Dark theme styles
 │   ├── api.ts                API client (typed)
-│   ├── main.tsx              Entry point
+│   ├── main.tsx              Entry point with React Router
 │   ├── index.css             Design system
-│   └── components/
-│       ├── UploadArea.tsx    File upload
-│       ├── SettingsForm.tsx  Settings panel
-│       ├── ProgressCard.tsx  Progress display
-│       └── ResultsPanel.tsx  Results & downloads
+│   ├── components/
+│   │   ├── DevHeader.tsx     Glassmorphic header
+│   │   ├── SettingsSheet.tsx Collapsible settings panel
+│   │   ├── InteractiveDevMap.tsx React-Leaflet map
+│   │   ├── PresetSelectionModal.tsx Preset picker
+│   │   ├── FilterSelectionModal.tsx Filter builder
+│   │   └── Modal.tsx         Base modal component
+│   └── hooks/
+│       └── useWebSocket.ts   Real-time updates hook
 ├── index.html
-├── package.json
+├── package.json              (react-router, leaflet, socket.io-client)
 ├── vite.config.ts
 ├── tsconfig.json
 ├── Dockerfile
 └── README.md
 
+backend/
+├── app.py                    Flask API with job tracking + WebSocket
+├── requirements.txt          Flask + dependencies
+└── test_api.py               API tests (skeleton)
+
 docker/
-├── app.py                    UPDATED - Job tracking + async
-├── docker-compose.yml        UPDATED - Frontend service
-└── docker-compose.dev.yml    NEW - Dev with hot reload
+├── Dockerfile                Backend container
+├── Dockerfile.nginx          Frontend + Nginx
+├── docker-compose.yml        Production setup
+├── docker-compose.dev.yml    Dev with hot reload
+└── nginx.conf                Reverse proxy config
 
 docs/
-├── QUICKSTART-FRONTEND.md    NEW - User guide
-└── FRONTEND.md               NEW - Dev guide
+├── QUICKSTART-FRONTEND.md    User guide
+└── FRONTEND.md               Dev guide
 
-IMPLEMENTATION_NOTES.md       NEW - Technical summary
-verify_implementation.sh      NEW - Verification script (in scripts/)
-test_api.py                   NEW - API tests (skeleton)
+FRONTEND_QUICKREF.md          Quick reference (this file)
+IMPLEMENTATION_NOTES.md       Technical summary
 ```
 
 ## 🔧 Key Technologies
@@ -113,13 +134,14 @@ test_api.py                   NEW - API tests (skeleton)
 
 | Metric | Value |
 |--------|-------|
-| Frontend files | 13 |
-| React components | 4 |
-| Lines of TypeScript/React | ~700 |
-| Lines of CSS | ~600 |
-| Docker images | 2 (app + frontend) |
-| NPM dependencies | 3 (react, react-dom, axios) |
-| Python changes | 2 files updated (app.py, docker-compose.yml) |
+| Frontend files | 20+ |
+| React components | 6 main + 1 modal base |
+| Custom hooks | 1 (useWebSocket) |
+| Lines of TypeScript/React | ~2,500 |
+| Lines of CSS | ~1,200 |
+| Docker images | 2 (backend + nginx/frontend) |
+| NPM dependencies | react, react-dom, react-router-dom, axios, leaflet, react-leaflet, socket.io-client, lucide-react |
+| Backend additions | GeoJSON endpoint, WebSocket support |
 
 ## ✅ Verification
 

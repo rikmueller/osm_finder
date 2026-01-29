@@ -23,26 +23,40 @@ Located in `core/` directory - reusable modules called by CLI and web API:
 Entry point: `cli.main.run_pipeline()` - returns dict with paths and metadata
 
 ### Frontend Architecture (React/TypeScript)
-Modern single-page application with component-based architecture:
+Modern map-first single-page application with continuous visual feedback:
 
 **Core Files:**
-- [web/src/App.tsx](../web/src/App.tsx) - Main orchestrator (stage management: idle → uploading → processing → completed/error)
+- [web/src/DevApp.tsx](../web/src/DevApp.tsx) - Main orchestrator (stage management: idle → uploaded → processing → completed/error)
 - [web/src/api.ts](../web/src/api.ts) - Typed API client with axios
 - [web/src/components/](../web/src/components/) - Reusable UI components
+- [web/src/hooks/](../web/src/hooks/) - Custom React hooks
 
 **Key Components:**
-- `UploadArea` - Drag-and-drop GPX upload with validation
-- `SettingsForm` - Project name, radius, presets, custom filters
-- `ProgressCard` - Real-time progress bar with status messages
-- `ResultsPanel` - Download links + embedded interactive map
-- `InteractiveMap` - React-Leaflet integration showing track + POIs
+- `DevHeader` - Glassmorphic header with branding and modern styling
+- `SettingsSheet` - Collapsible settings sidebar (mobile-responsive with smooth animations)
+- `InteractiveDevMap` - React-Leaflet map with instant GPX visualization and live POI updates
+- `PresetSelectionModal` - Category-organized preset selection (Camping, Accommodation, Food, etc.)
+- `FilterSelectionModal` - Custom OSM filter builder (key=value format)
+- `Modal` - Reusable modal base component with backdrop and animations
+
+**Custom Hooks:**
+- `useWebSocket` - Real-time progress updates via Socket.IO (with polling fallback)
 
 **State Flow:**
 ```
-User uploads GPX → /api/process → job_id
-Poll /api/status/{job_id} every 1s → update progress
-Completed → fetch /api/job/{job_id}/geojson → render map
+User uploads GPX → instant client-side parsing → track renders on map
+Click Generate → /api/process → job_id
+WebSocket/polling updates → progress bar + live POI markers
+Completed → interactive map with all results + download buttons
 ```
+
+**Key Features:**
+- **Instant visualization**: GPX track appears immediately after upload (client-side DOMParser)
+- **Continuous experience**: Map visible throughout entire workflow
+- **Real-time POIs**: Markers appear on map as backend finds them
+- **Mobile-first**: Collapsible settings panel, touch-friendly controls
+- **Advanced filters**: Preset deletion preserves individual filters, complex filter management
+- **Tile persistence**: User's preferred map layer saved to localStorage
 
 ### REST API (Flask + SocketIO)
 Located in [backend/app.py](../backend/app.py) - async job processing with polling:
@@ -96,18 +110,20 @@ AlongGPX/
 │   └── test_api.py             # API test script
 ├── web/                         # React frontend
 │   ├── src/
-│   │   ├── App.tsx             # Main orchestrator
+│   │   ├── DevApp.tsx          # Main application
+│   │   ├── DevApp.css          # Dark theme styles
 │   │   ├── api.ts              # Typed API client
+│   │   ├── main.tsx            # React Router entry point
+│   │   ├── index.css           # Design system
 │   │   ├── components/         # UI components
-│   │   │   ├── UploadArea.tsx
-│   │   │   ├── SettingsForm.tsx
-│   │   │   ├── ProgressCard.tsx
-│   │   │   ├── ResultsPanel.tsx
-│   │   │   ├── InteractiveMap.tsx  # React-Leaflet map
+│   │   │   ├── DevHeader.tsx
+│   │   │   ├── SettingsSheet.tsx
+│   │   │   ├── InteractiveDevMap.tsx  # React-Leaflet map
 │   │   │   ├── PresetSelectionModal.tsx
-│   │   │   └── FilterSelectionModal.tsx
-│   │   ├── hooks/              # Custom React hooks
-│   │   └── main.tsx            # React entry point
+│   │   │   ├── FilterSelectionModal.tsx
+│   │   │   └── Modal.tsx         # Base modal component
+│   │   └── hooks/              # Custom React hooks
+│   │       └── useWebSocket.ts
 │   ├── Dockerfile              # Frontend production build
 │   ├── vite.config.ts          # Vite build config
 │   └── package.json            # React, axios, leaflet, socket.io-client
@@ -161,10 +177,13 @@ track_line = LineString(track_points_m)  # EPSG:3857
 
 ### Frontend TypeScript Conventions
 - **Typed API client**: All responses typed in [api.ts](../web/src/api.ts)
-- **CSS Modules**: Each component has corresponding `.css` file
-- **No heavy UI libraries**: Custom CSS with design system (CSS variables)
-- **Error boundaries**: Top-level error handling in App.tsx
-- **Polling, not WebSocket**: Default to 1s polling for job status (SocketIO optional)
+- **CSS Modules pattern**: Each component has corresponding `.css` file (e.g., `DevHeader.tsx` + `DevHeader.css`)
+- **Dark theme**: DevApp uses dark color scheme with glassmorphic effects
+- **No heavy UI libraries**: Custom CSS with design system (CSS variables in index.css)
+- **Error boundaries**: Top-level error handling in DevApp.tsx
+- **Real-time updates**: useWebSocket hook for Socket.IO, graceful fallback to 1s polling
+- **Client-side GPX parsing**: Browser DOMParser reads GPX immediately for instant visualization
+- **LocalStorage persistence**: Tile layer preference saved across sessions
 
 ## Configuration Hierarchy (Highest → Lowest)
 
@@ -353,9 +372,10 @@ FLASK_PORT=5000
 - **[config/config.yaml](../config/config.yaml)** - Adjust defaults
 
 ### Frontend Developer
-- **[web/src/App.tsx](../web/src/App.tsx)** - Main orchestration
+- **[web/src/DevApp.tsx](../web/src/DevApp.tsx)** - Main orchestration
 - **[web/src/components/](../web/src/components/)** - UI components
 - **[web/src/api.ts](../web/src/api.ts)** - API client
+- **[web/src/hooks/useWebSocket.ts](../web/src/hooks/useWebSocket.ts)** - Real-time hook
 - **[web/src/index.css](../web/src/index.css)** - Design system
 
 ### DevOps

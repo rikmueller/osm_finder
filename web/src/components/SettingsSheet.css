@@ -478,8 +478,15 @@
 }
 
 .btn-secondary {
-  background: #94a3b8;
-  color: white;
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #64748b;
+}
+
+.btn-secondary:hover {
+  background: #f1f5f9;
+  border-color: #475569;
+  color: #475569;
 }
 
 .btn-disabled {

@@ -160,6 +160,13 @@ def load_config_from_env() -> dict:
 # Load configuration once at startup
 APP_CONFIG = load_config_from_env()
 
+# Ensure output directory exists on startup
+try:
+    os.makedirs(APP_CONFIG['project']['output_path'], exist_ok=True)
+    logger.info(f"Output directory ready: {APP_CONFIG['project']['output_path']}")
+except Exception as e:
+    logger.error(f"Failed to create output directory: {e}")
+
 # Extract cleanup settings for global use
 CLEANUP_INTERVAL_SECONDS = APP_CONFIG['cleanup']['interval_seconds']
 JOB_TTL_SECONDS = APP_CONFIG['cleanup']['job_ttl_seconds']

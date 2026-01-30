@@ -7,11 +7,11 @@
 
 services:
   # Flask backend API
-  app:
+  backend:
     build:
       context: ..
       dockerfile: deployment/Dockerfile
-    container_name: alonggpx-app
+    container_name: alonggpx-backend
     env_file:
       - .env  # Load environment variables from deployment/.env
     environment:
@@ -54,7 +54,7 @@ services:
     ports:
       - "3000:80"
     depends_on:
-      - app
+      - backend
     restart: unless-stopped
     networks:
       - alonggpx-network

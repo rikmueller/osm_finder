@@ -18,10 +18,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend ./backend
 COPY cli ./cli
 COPY data/presets.yaml ./data/presets.yaml
-COPY data/input/example.gpx ./data/input/example.gpx
 
 # Create data directories with proper permissions
-RUN mkdir -p /app/data/input /app/data/output && chmod 777 /app/data/output
+RUN mkdir -p /app/data/input /app/data/output && \
+    chmod 777 /app/data/output && \
+    chmod 777 /app/data/input
+
+# Copy example GPX if it exists
+COPY data/input/example.gpx ./data/input/example.gpx 2>/dev/null || true
 
 # Production stage
 FROM python:3.11-slim

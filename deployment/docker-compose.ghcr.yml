@@ -3,6 +3,15 @@
 # ==============================================================================
 # Uses pre-built images from GitHub Container Registry (ghcr.io)
 # Perfect for production deployments - just pull and run, no build step needed
+# 
+# USAGE:
+#   1. Create .env file in this directory (or use deployment/.env as template)
+#   2. Run: docker compose -f docker-compose.ghcr.yml up -d
+#   3. Access at http://localhost:3000
+# 
+# VOLUMES:
+#   - alonggpx-output: Stores generated Excel/HTML files (persisted)
+#   - alonggpx-input: Optional, for example GPX files
 # ==============================================================================
 
 services:
@@ -10,15 +19,12 @@ services:
     image: ghcr.io/rikmueller/alonggpx-backend:latest
     pull_policy: always
     container_name: alonggpx-backend
-    ports:
-      - "5000:5000"
     volumes:
-      # Output directory: Required - for generated Excel/HTML files
-      - ../data/output:/app/data/output
-      # Input directory: Optional - only needed if you want to use CLI mode inside container
-      - ../data/input:/app/data/input
-      # Presets file: Optional - only needed if you want to override built-in presets
-      # - ../data/presets.yaml:/app/data/presets.yaml
+      # Named volumes - no local source tree needed
+      - alonggpx-output:/app/data/output
+      - alonggpx-input:/app/data/input
+      # Optional: Mount custom presets file (uncomment to override built-in presets)
+      # - ./presets.yaml:/app/data/presets.yaml:ro
     env_file:
       - .env  # Load environment variables from deployment/.env
     environment:
@@ -42,8 +48,10 @@ services:
       - ALONGGPX_DEFAULT_MARKER_COLOR=gray
       - ALONGGPX_MARKER_COLOR_PALETTE=orange;purple;green;blue;darkred;darkblue;darkgreen;cadetblue;pink
     restart: unless-stopped
+    networks:
+      - alonggpx-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      test: ["CMD-SHELL", "python -c 'import requests; requests.get(\"http://localhost:5000/health\")' || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -57,12 +65,20 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+    networks:
+      - alonggpx-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:80 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
 
+networks:
+  alonggpx-network:
+    driver: bridge
+
 volumes:
-  data_output:
-  data_input:
+  alonggpx-output:
+    driver: local
+  alonggpx-input:
+    driver: local

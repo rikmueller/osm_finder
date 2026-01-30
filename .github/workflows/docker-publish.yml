@@ -55,6 +55,7 @@ jobs:
           file: ./docker/Dockerfile
           platforms: linux/amd64
           push: true
+          provenance: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
@@ -101,6 +102,7 @@ jobs:
           file: ./docker/Dockerfile.nginx
           platforms: linux/amd64
           push: true
+          provenance: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
@@ -148,6 +150,7 @@ jobs:
           file: ./docker/Dockerfile
           platforms: linux/amd64
           push: true
+          provenance: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: ${{ steps.meta-backend-tag.outputs.tags }}
@@ -193,6 +196,7 @@ jobs:
           file: ./docker/Dockerfile.nginx
           platforms: linux/amd64
           push: true
+          provenance: false
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: ${{ steps.meta-frontend-tag.outputs.tags }}

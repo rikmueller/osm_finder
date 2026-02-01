@@ -124,23 +124,19 @@ And decide on a flavor:
 
 ### 3.1 Command-Line Interface ⌨️
 
-For batch processing and automation:
-📖 Setup instructions: [config/cli/README.md](config/cli/README.md)
+For batch processing and automation: [config/cli/README.md](config/cli/README.md)
 
 ### 3.2 Local Development 💻
 
-Run backend and frontend locally for development:
-📖 Development setup: [config/local-dev/README.md](config/local-dev/README.md)
+Run backend and frontend locally for development: [config/local-dev/README.md](config/local-dev/README.md)
 
 ### 3.3 Docker Development (Dev-Setup with hot reload) 🐳 
 
-Development environment with hot reload:
-📖 Docker dev guide: [config/docker-dev/README.md](config/docker-dev/README.md)
+Development environment with hot reload: [config/docker-dev/README.md](config/docker-dev/README.md)
 
 ### 3.4 Docker Production 🌐
 
-Production environment:
-📖 Docker prod guide: [config/docker-prod/README.md](config/docker-prod/README.md)
+Production environment: [config/docker-prod/README.md](config/docker-prod/README.md)
 
 ---
 

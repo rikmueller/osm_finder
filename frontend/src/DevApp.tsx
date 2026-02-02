@@ -101,6 +101,7 @@ function DevApp() {
   const [poiData, setPoiData] = useState<MapPoi[]>([])
   const [sheetOpen, setSheetOpen] = useState(() => window.innerWidth >= 992)
   const [tileId, setTileId] = useState<string>(loadTilePreference())
+  const [pulseFab, setPulseFab] = useState(() => window.innerWidth < 992)
 
   const [settings, setSettings] = useState({
     projectName: '',
@@ -155,6 +156,15 @@ function DevApp() {
 
   // WebSocket subscription for live progress
   useWebSocket(jobId, handleJobUpdate)
+
+  // Auto-dismiss FAB pulse after 20 seconds (10 cycles × 2s)
+  useEffect(() => {
+    if (!pulseFab) return
+    const timer = setTimeout(() => {
+      setPulseFab(false)
+    }, 20000)
+    return () => clearTimeout(timer)
+  }, [pulseFab])
 
   // Close settings sheet on mobile when processing completes
   useEffect(() => {
@@ -428,6 +438,8 @@ function DevApp() {
         onDeletePreset={deletePresetFromChip}
         onDeleteIncludeFilter={deleteIncludeFilterFromChip}
         onDeleteExcludeFilter={deleteExcludeFilterFromChip}
+        shouldPulseFab={pulseFab}
+        onFabClick={() => setPulseFab(false)}
       />
 
       <PresetSelectionModal

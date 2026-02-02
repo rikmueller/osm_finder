@@ -26,6 +26,8 @@ type Props = {
   onDeletePreset: (preset: string) => void
   onDeleteIncludeFilter: (filter: string) => void
   onDeleteExcludeFilter: (filter: string) => void
+  shouldPulseFab?: boolean
+  onFabClick?: () => void
 }
 
 export default function SettingsSheet({
@@ -45,6 +47,8 @@ export default function SettingsSheet({
   onDeletePreset,
   onDeleteIncludeFilter,
   onDeleteExcludeFilter,
+  shouldPulseFab = false,
+  onFabClick,
 }: Props) {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -95,8 +99,11 @@ export default function SettingsSheet({
       {/* Mobile FAB - only visible on mobile when closed */}
       {!open && (
         <button
-          className="sheet-fab-mobile"
-          onClick={onToggle}
+          className={`sheet-fab-mobile ${shouldPulseFab ? 'needs-attention' : ''}`}
+          onClick={() => {
+            onToggle()
+            onFabClick?.()
+          }}
           aria-label="Open settings"
           title="Open settings"
         >

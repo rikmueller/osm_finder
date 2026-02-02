@@ -24,6 +24,21 @@
     transform: scale(0.95);
   }
 
+  .sheet-fab-mobile.needs-attention {
+    animation: pulse-onboarding 2.5s ease-in-out 10;
+  }
+
+  @keyframes pulse-onboarding {
+    0%, 100% {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 8px 32px rgba(99, 102, 241, 0.7);
+      transform: scale(1.12);
+    }
+  }
+
   /* Mobile backdrop */
   .sheet-backdrop-mobile {
     position: fixed;

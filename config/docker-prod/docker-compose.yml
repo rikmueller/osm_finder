@@ -51,7 +51,11 @@ services:
       dockerfile: deployment/Dockerfile.frontend-prod
     container_name: alonggpx-nginx
     ports:
-      - "3000:80"
+      - "80:80"
+      - "443:443"
+    volumes:
+      # SSL certificates (mount your cert/key directory)
+      - /etc/ssl/along-gpx:/etc/ssl/along-gpx:ro
     depends_on:
       - backend
     restart: unless-stopped

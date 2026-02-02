@@ -56,7 +56,6 @@ export default function SettingsSheet({
   onDeletePreset,
   onDeleteIncludeFilter,
   onDeleteExcludeFilter,
-  onOpenHelp,
   shouldPulseFab = false,
   onFabClick,
 }: Props) {

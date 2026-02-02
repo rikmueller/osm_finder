@@ -422,11 +422,6 @@ function DevApp() {
       const currentManualIncludes = settings.includes.filter((f) => !allPresetIncludeFilters.includes(f))
       const currentManualExcludes = settings.excludes.filter((f) => !allPresetExcludeFilters.includes(f))
       
-      // Get exclude filters from removed presets that should be kept as manual
-      const excludeFiltersFromRemovedPresets = presetsToRemove.flatMap(
-        (p) => presetsDetail[p]?.exclude || []
-      )
-      
       // Recalculate with remaining presets, keeping other filters from removed preset as manual
       const includesFromRemainingPresets = remainingPresets.flatMap(
         (p) => presetsDetail[p]?.include || [],

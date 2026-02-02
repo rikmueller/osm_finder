@@ -5,6 +5,35 @@
   color: var(--color-text);
 }
 
+.help-content {
+  display: grid;
+  gap: 14px;
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.help-content h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.help-content p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.help-content code {
+  background: var(--color-bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  color: var(--color-text);
+  font-family: monospace;
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;

@@ -393,6 +393,20 @@
   gap: 10px;
 }
 
+.help-icon {
+  color: var(--color-text-secondary);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.help-icon:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: #f8fbff;
+}
+
 .field-inline label {
   min-width: 110px;
   margin: 0;

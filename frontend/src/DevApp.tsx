@@ -10,6 +10,7 @@ import InteractiveMap, { MapPoi, TileSource } from './components/InteractiveMap'
 import SettingsSheet from './components/SettingsSheet'
 import PresetSelectionModal from './components/PresetSelectionModal'
 import FilterSelectionModal from './components/FilterSelectionModal'
+import Modal from './components/Modal'
 import { useWebSocket } from './hooks/useWebSocket'
 import './DevApp.css'
 
@@ -117,6 +118,7 @@ function DevApp() {
   const [presetModalOpen, setPresetModalOpen] = useState(false)
   const [filterModalOpen, setFilterModalOpen] = useState(false)
   const [filterModalMode, setFilterModalMode] = useState<FilterModalMode>('include')
+  const [helpOpen, setHelpOpen] = useState(false)
 
   const fetchGeoJson = useCallback(
     async (id: string) => {
@@ -363,6 +365,8 @@ function DevApp() {
     setFilterModalOpen(true)
   }
   const closeFilterModal = () => setFilterModalOpen(false)
+  const openHelpModal = () => setHelpOpen(true)
+  const closeHelpModal = () => setHelpOpen(false)
 
   const presetsDetail = config?.presets_detail || {}
 
@@ -491,7 +495,11 @@ function DevApp() {
 
   return (
     <div className={`dev-app ${sheetOpen ? 'sheet-open' : 'sheet-closed'}`}>
-      <BrandingHeader title="along-gpx" subtitle="Plan smarter along your track" />
+      <BrandingHeader
+        title="along-gpx"
+        subtitle="Plan smarter along your track"
+        onHelpClick={openHelpModal}
+      />
       {notification && (
         <div style={{
           position: 'fixed',
@@ -543,6 +551,7 @@ function DevApp() {
         onDeletePreset={deletePresetFromChip}
         onDeleteIncludeFilter={deleteIncludeFilterFromChip}
         onDeleteExcludeFilter={deleteExcludeFilterFromChip}
+        onOpenHelp={openHelpModal}
         shouldPulseFab={pulseFab}
         onFabClick={() => setPulseFab(false)}
       />
@@ -576,6 +585,42 @@ function DevApp() {
           closeFilterModal()
         }}
       />
+
+      <Modal open={helpOpen} title="Quickstart" onClose={closeHelpModal}>
+        <div className="help-content">
+
+          <p>
+            Find points of interest (POIs) from OpenStreetMap along your GPX track or around a map marker.
+            Search for campsites, water sources, shelters, and more within a custom radius.
+          </p>
+          
+          <h4>Project Settings</h4>
+          <p>
+            <strong>Project name</strong>: Used for download filenames.<br />
+            <strong>Search radius</strong>: How far from the track/marker to search (1-50 km).<br />
+            <strong>Input mode</strong>: Choose <strong>GPX Track</strong> to search along a route, or <strong>Map Marker</strong> to search around a single point.
+          </p>
+          
+          <h4>Input Modes</h4>
+          <p>
+            <strong>GPX Track</strong>: Upload a .gpx file to search for POIs along your entire route. The track appears on the map immediately after upload.<br />
+            <strong>Map Marker</strong>: Place a marker directly on the map by dragging it to your desired location. Perfect for searching around a single point without uploading a file.
+          </p>
+          
+          <h4>Presets &amp; Filters</h4>
+          <p>
+            <strong>Presets</strong>: Pre-configured filter sets (e.g., "Campsites", "Drinking Water").<br />
+            <strong>Include filters</strong>: OSM tags to find (e.g., <code>tourism=camp_site</code>).<br />
+            <strong>Exclude filters</strong>: Remove unwanted results (e.g., <code>tents=no</code>).<br />
+            At least one preset or include filter is required.
+          </p>
+          
+          <h4>Downloads</h4>
+          <p>
+            After processing completes, download the <strong>Excel file</strong> (table with all POIs) or the <strong>HTML map</strong> (interactive Folium map with markers).
+          </p>
+        </div>
+      </Modal>
     </div>
   )
 }

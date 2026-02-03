@@ -4,7 +4,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './InteractiveMap.css'
 import { Crosshair, Layers, Navigation, Play, Square } from 'lucide-react'
-import { apiClient } from '../api'
+import { apiClient, JobStatus } from '../api'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 export type TileSource = {
@@ -36,6 +36,7 @@ type Props = {
   tileSource: TileSource
   tileOptions: TileSource[]
   onTileChange: (id: string) => void
+  jobStatus: JobStatus | null
 }
 
 // Default palette (will be overridden by config.yaml values)
@@ -469,16 +470,22 @@ function MapClickHandler({ onMapClick }: { onMapClick: (lat: number, lon: number
   return null
 }
 
-export default function InteractiveMap({ track, pois, markerPosition, onMarkerChange, inputMode, tileSource, tileOptions, onTileChange }: Props) {
+export default function InteractiveMap({ track, pois, markerPosition, onMarkerChange, inputMode, tileSource, tileOptions, onTileChange, jobStatus }: Props) {
   const initialCenter: [number, number] = [49.0069, 8.4037] // fallback Karlsruhe
   const [colorPalette, setColorPalette] = useState<string[]>(DEFAULT_COLOR_PALETTE)
   const [trackColor, setTrackColor] = useState<string>('#2563eb')
   const markerRef = useRef<L.Marker>(null)
 
+  // Determine if marker should be locked (during processing or after completion, but not on failure)
+  const isMarkerLocked = jobStatus && (
+    jobStatus.state === 'processing' || 
+    jobStatus.state === 'completed'
+  )
+
   // Handle map click to place or reposition marker
   const handleMapClick = (lat: number, lon: number) => {
-    // In marker mode, clicking map places or repositions marker
-    if (inputMode === 'marker') {
+    // In marker mode, clicking map places or repositions marker (unless locked)
+    if (inputMode === 'marker' && !isMarkerLocked) {
       onMarkerChange([lat, lon])
     }
   }
@@ -605,7 +612,7 @@ export default function InteractiveMap({ track, pois, markerPosition, onMarkerCh
           <Marker
             position={[markerPosition[0], markerPosition[1]]}
             icon={markerIcon}
-            draggable={true}
+            draggable={!isMarkerLocked}
             ref={markerRef}
             eventHandlers={{
               dragend: handleMarkerDrag,
@@ -615,6 +622,11 @@ export default function InteractiveMap({ track, pois, markerPosition, onMarkerCh
               <div>
                 <strong>Search Center</strong><br />
                 {markerPosition[0].toFixed(5)}°N, {markerPosition[1].toFixed(5)}°E
+                {isMarkerLocked && (
+                  <div style={{ marginTop: '8px', fontSize: '0.9em', fontStyle: 'italic', opacity: 0.7 }}>
+                    Hit reset to move marker (all results will be cleared).
+                  </div>
+                )}
               </div>
             </Popup>
           </Marker>

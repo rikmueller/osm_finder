@@ -523,6 +523,7 @@ function DevApp() {
         tileSource={tileSource}
         tileOptions={TILE_SOURCES}
         onTileChange={setTileId}
+        jobStatus={jobStatus}
       />
 
       <SettingsSheet

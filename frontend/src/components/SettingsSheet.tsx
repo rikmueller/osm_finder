@@ -311,7 +311,9 @@ export default function SettingsSheet({
           </div>
           <div className="instruction-tile">
             <p>
-              Place the marker on the desired position on the map.
+              {markerPosition 
+                ? 'Marker is set on map, change position by dragging.'
+                : 'Click the map to place a marker at the desired position.'}
             </p>
           </div>
         </section>

@@ -20,25 +20,38 @@ export default function HomePage() {
       </section>
 
       <section className="marketing-container">
-        <h2 className="marketing-section-title">Built for quick discovery</h2>
+        <h2 className="marketing-section-title">Features</h2>
         <p className="marketing-section-subtitle">
-          Use presets or custom filters to find restaurants, services, accommodations, or any OpenStreetMap tag.
+          Everything you need to discover and organize points of interest with a clean, fast workflow.
         </p>
+        
         <div className="marketing-grid">
           <div className="marketing-card">
-            <h3>Search any area</h3>
-            <p>Drop a marker or upload a GPX route to search around a single spot or across an entire journey.</p>
+            <h3>Flexible input modes</h3>
+            <p>Upload GPX tracks or drop a map marker for quick, targeted exploration.</p>
           </div>
           <div className="marketing-card">
-            <h3>Export-ready results</h3>
-            <p>Download Excel summaries or interactive HTML maps to share with teams or keep for later.</p>
+            <h3>Preset-powered discovery</h3>
+            <p>Start with curated presets or build custom filters using standard OpenStreetMap tags.</p>
+          </div>
+          <div className="marketing-card">
+            <h3>Map-first experience</h3>
+            <p>See results on a live map with instant track rendering and real-time progress updates.</p>
+          </div>
+          <div className="marketing-card">
+            <h3>Smart filtering</h3>
+            <p>Include and exclude tags to surface exactly the results you care about.</p>
+          </div>
+          <div className="marketing-card">
+            <h3>Export tools</h3>
+            <p>Download Excel files and interactive HTML maps for offline use or sharing.</p>
           </div>
         </div>
 
         <div className="marketing-cta-panel">
           <div>
             <h3>Ready to explore?</h3>
-            <p>Start a search in minutes with your own route or a quick marker.</p>
+            <p>Open the map and run your first search in minutes.</p>
           </div>
           <Link to="/map" className="marketing-button primary">
             Open Map

@@ -1,13 +1,13 @@
 .marketing-container {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 48px 20px 64px;
+  padding: 24px 20px 64px;
 }
 
 .marketing-hero {
   display: grid;
   gap: 24px;
-  padding: 72px 20px 56px;
+  padding: 72px 20px 24px;
   max-width: 1120px;
   margin: 0 auto;
 }

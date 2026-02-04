@@ -23,9 +23,6 @@ export default function MarketingLayout({
           </Link>
 
           <nav className="marketing-nav" aria-label="Primary">
-            <NavLink to="/features" className={({ isActive }) => `marketing-link ${isActive ? 'active' : ''}`}>
-              Features
-            </NavLink>
             <NavLink to="/how-it-works" className={({ isActive }) => `marketing-link ${isActive ? 'active' : ''}`}>
               How it works
             </NavLink>

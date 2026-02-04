@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 # Flask app initialization
 # Note: This module is now under backend/ instead of docker/
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50MB max file size
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5MB max file size
 app.config['UPLOAD_FOLDER'] = tempfile.gettempdir()
 app.config['JSON_SORT_KEYS'] = False
 

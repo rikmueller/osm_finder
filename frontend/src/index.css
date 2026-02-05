@@ -79,6 +79,10 @@
   --wa-step-label: rgba(148, 163, 184, 0.9);
   --wa-cta-bg: linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(30, 64, 175, 0.55));
   --wa-cta-border: rgba(37, 99, 235, 0.4);
+
+  /* Dark mode color adjustments for better contrast */
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
 }
 
 * {

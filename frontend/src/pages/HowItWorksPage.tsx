@@ -74,6 +74,7 @@ export default function HowItWorksPage() {
                   <li><strong>Mobile:</strong> Tap the upload area to access files or cloud storage</li>
                 </ul>
                 <p>Your track appears immediately on the map for confirmation.</p>
+                <br/>
                 <h5>📍 Using Marker Mode</h5>
                 <p>If you prefer to search around a specific point rather than a route, select Input Mode Marker.</p>
                 <ul>
@@ -81,7 +82,7 @@ export default function HowItWorksPage() {
                   <li>Click the map to place your search marker</li>
                   <li>Search finds POIs within your radius around that point</li>
                 </ul>
-                <br/>
+                <p>💡 In order to set a new map marker after the search, you must first click the reset button in the settings.</p>
                 <p><strong>⚠️ Mobile users:</strong> Reopen settings panel after placing a marker to adjust filters and start processing.</p>
               </div>
             )}
@@ -141,7 +142,10 @@ export default function HowItWorksPage() {
                   <li>Coordinates and address (when available)</li>
                   <li>All relevant OSM tags</li>
                 </ul>
-                <p><strong>💡 Tip:</strong> Filter order matters—the first matching include filter determines marker color.</p>
+                 <p><strong>💡 Tip:</strong> Filter order matters—the first matching include filter determines marker color.</p>
+                 <br/>
+                 <p>💡 In order to set a new map marker after the search, you must first click the reset button in the settings.</p>
+               
               </div>
             )}
           </div>

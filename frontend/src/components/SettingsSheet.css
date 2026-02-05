@@ -357,6 +357,16 @@
   box-shadow: inset 0 0 0 2px var(--color-primary);
 }
 
+/* Dark mode overrides for upload tile */
+:root.theme-dark .upload-tile:hover {
+  background: rgba(37, 99, 235, 0.12);
+}
+
+:root.theme-dark .upload-tile.dragover {
+  background: rgba(37, 99, 235, 0.18);
+  box-shadow: inset 0 0 0 2px rgba(37, 99, 235, 0.8);
+}
+
 .upload-tile input {
   display: none;
 }

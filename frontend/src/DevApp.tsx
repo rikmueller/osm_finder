@@ -629,7 +629,7 @@ function DevApp() {
   return (
     <div className={`dev-app ${sheetOpen ? 'sheet-open' : 'sheet-closed'}`}>
       <SeoMeta
-        title="Map | WhatsAround"
+        title="App | WhatsAround"
         description="Run POI searches with custom filters, view results on a live map, and export Excel or HTML maps."
         url="https://getwhatsaround.app/app"
       />

@@ -7,10 +7,7 @@ type Props = {
   image?: string
 }
 
-const DEFAULT_IMAGE = 'https://getwhatsaround.app/og-image.png'
-
 export default function SeoMeta({ title, description, url, image }: Props) {
-  const imageUrl = image || DEFAULT_IMAGE
   return (
     <Helmet>
       <title>{title}</title>
@@ -21,12 +18,12 @@ export default function SeoMeta({ title, description, url, image }: Props) {
       <meta property="og:description" content={description} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={url} />
-      <meta property="og:image" content={imageUrl} />
+      {image && <meta property="og:image" content={image} />}
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={imageUrl} />
+      {image && <meta name="twitter:image" content={image} />}
     </Helmet>
   )
 }

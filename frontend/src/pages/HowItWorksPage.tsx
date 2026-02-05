@@ -15,12 +15,12 @@ export default function HowItWorksPage() {
   return (
     <MarketingLayout>
       <SeoMeta
-        title="How it works | WhatsAround"
+        title="Help | WhatsAround"
         description="See how WhatsAround turns routes into structured insights with filters, live mapping, and export-ready outputs."
         url="https://getwhatsaround.app/how-it-works"
       />
 
-      <section className="marketing-container marketing-hero">
+      <section className="marketing-container marketing-hero marketing-hero-narrow">
         <h1>How it works.</h1>
         <p>Click any step below to learn more</p>
       </section>
@@ -144,7 +144,7 @@ export default function HowItWorksPage() {
                 </ul>
                  <p><strong>💡 Tip:</strong> Filter order matters—the first matching include filter determines marker color.</p>
                  <br/>
-                 <p>💡 In order to set a new map marker after the search, you must first click the reset button in the settings.</p>
+                 <p>⚠️ In order to set a new map marker after the search, you must first click the reset button in the settings.</p>
                
               </div>
             )}

@@ -38,6 +38,12 @@
   flex-wrap: wrap;
 }
 
+.marketing-hero-narrow h1,
+.marketing-hero-narrow p,
+.marketing-hero-narrow .marketing-hero-actions {
+  padding: 0 18px;
+}
+
 .marketing-section-title {
   font-size: 1.6rem;
   color: var(--wa-hero-title);
@@ -104,6 +110,10 @@
   .marketing-steps {
     grid-template-columns: 1fr;
   }
+
+  .marketing-steps-full {
+    margin: 0 0 32px 0;
+  }
 }
 
 .marketing-step {
@@ -144,6 +154,7 @@
   flex-wrap: wrap;
   gap: 16px;
 }
+
 
 .marketing-cta-panel h3 {
   color: var(--wa-hero-title);

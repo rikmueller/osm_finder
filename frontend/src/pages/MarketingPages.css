@@ -155,6 +155,153 @@
   box-shadow: 0 16px 36px rgba(37, 99, 235, 0.45);
 }
 
+.marketing-guide-content {
+  line-height: 1.7;
+}
+
+.marketing-guide-content h3 {
+  color: var(--wa-hero-title);
+  font-size: 1.3rem;
+  margin: 2.5rem 0 1rem 0;
+}
+
+.marketing-guide-content h3:first-child {
+  margin-top: 0;
+}
+
+.marketing-guide-content p {
+  color: var(--wa-card-text);
+  margin: 0.75rem 0;
+}
+
+.marketing-guide-content ul {
+  color: var(--wa-card-text);
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.marketing-guide-content li {
+  margin: 0.5rem 0;
+}
+
+.marketing-guide-content code {
+  background: var(--wa-step-bg);
+  border: 1px solid var(--wa-step-border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.9em;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+.marketing-guide-content a {
+  color: #3b82f6;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.marketing-guide-content a:hover {
+  border-bottom-color: #3b82f6;
+}
+
+/* Expandable steps */
+.marketing-step.expandable {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.marketing-step.expandable:hover {
+  border-color: var(--wa-accent);
+  transform: translateY(-2px);
+}
+
+.marketing-step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.marketing-step-header > div {
+  flex: 1;
+}
+
+.expand-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--wa-hero-title);
+  transition: transform 0.3s ease;
+  margin-top: 4px;
+}
+
+.marketing-step.expanded .expand-icon {
+  transform: rotate(180deg);
+}
+
+.marketing-step-details {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--wa-step-border);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.marketing-step-details h5 {
+  color: var(--wa-hero-title);
+  font-size: 1rem;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.marketing-step-details h5:first-child {
+  margin-top: 0;
+}
+
+.marketing-step-details p {
+  color: var(--wa-card-text);
+  margin: 0.5rem 0;
+}
+
+.marketing-step-details ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+  color: var(--wa-card-text);
+}
+
+.marketing-step-details li {
+  margin: 0.35rem 0;
+}
+
+.marketing-step-details code {
+  background: var(--wa-step-bg);
+  border: 1px solid var(--wa-step-border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.9em;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.marketing-step-details a {
+  color: #3b82f6;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.marketing-step-details a:hover {
+  border-bottom-color: #3b82f6;
+}
+
 @media (max-width: 700px) {
   .marketing-hero {
     padding-top: 56px;

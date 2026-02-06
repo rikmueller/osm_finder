@@ -640,7 +640,6 @@ function DevApp() {
     setPoiData([])
     setUploadedFile(null)
     setMarkerPosition(null)
-    setInputMode('track')
     setError(null)
     setSheetOpen(true)
     setLastProcessedSettings(null) // Clear snapshot on reset

@@ -6,7 +6,7 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "06:00"
-    target-branch: "dependabot/updates"
+    target-branch: "dependabot-updates"
     open-pull-requests-limit: 10
     rebase-strategy: "auto"
     labels:
@@ -18,7 +18,7 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "06:00"
-    target-branch: "dependabot/updates"
+    target-branch: "dependabot-updates"
     open-pull-requests-limit: 10
     rebase-strategy: "auto"
     labels:
@@ -30,7 +30,7 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "06:00"
-    target-branch: "dependabot/updates"
+    target-branch: "dependabot-updates"
     open-pull-requests-limit: 10
     rebase-strategy: "auto"
     labels:

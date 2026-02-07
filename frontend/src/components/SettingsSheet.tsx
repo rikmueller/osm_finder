@@ -16,6 +16,7 @@ type Props = {
   onSettingsChange: (changes: Partial<Props['settings']>) => void
   onFileSelected: (file: File | null) => void
   selectedFile: File | null
+  trackLabel?: string | null
   inputMode: 'track' | 'marker'
   markerPosition: [number, number] | null
   onClearMarker: () => void
@@ -43,6 +44,7 @@ export default function SettingsSheet({
   onSettingsChange,
   onFileSelected,
   selectedFile,
+  trackLabel,
   inputMode,
   markerPosition,
   onClearMarker,
@@ -293,13 +295,13 @@ export default function SettingsSheet({
         <section className="sheet-section" style={{ opacity: isSearchRunning ? 0.5 : 1, pointerEvents: isSearchRunning ? 'none' : 'auto' }}>
           <div className="section-head">
             <h3>GPX Track</h3>
-            {selectedFile ? (
+            {selectedFile || trackLabel ? (
               <span className="chip">
-                {selectedFile.name}
+                {selectedFile?.name || trackLabel}
                 <button
                   className="chip-delete"
                   onClick={() => onFileSelected(null)}
-                  aria-label={`Remove ${selectedFile.name}`}
+                  aria-label={`Remove ${selectedFile?.name || trackLabel}`}
                   title="Remove track"
                   disabled={isSearchRunning}
                 >

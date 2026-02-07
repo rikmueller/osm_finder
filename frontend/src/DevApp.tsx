@@ -42,6 +42,7 @@ const TILE_SOURCES: TileSource[] = [
 const LOCAL_STORAGE_TILE_KEY = 'whatsaround.tile'
 const LOCAL_STORAGE_SETTINGS_KEY = 'whatsaround.settings'
 const LOCAL_STORAGE_TRACK_DATA_KEY = 'whatsaround.trackData'
+const LOCAL_STORAGE_TRACK_NAME_KEY = 'whatsaround.trackName'
 const LOCAL_STORAGE_MARKER_POSITION_KEY = 'whatsaround.markerPosition'
 const LOCAL_STORAGE_INPUT_MODE_KEY = 'whatsaround.inputMode'
 const LOCAL_STORAGE_TRACK_RESULTS_KEY = 'whatsaround.trackResults'
@@ -101,6 +102,28 @@ function saveTrackData(trackData: [number, number][]) {
     localStorage.setItem(LOCAL_STORAGE_TRACK_DATA_KEY, JSON.stringify(trackData))
   } catch (err) {
     console.warn('Could not persist track data', err)
+  }
+}
+
+function loadTrackName(): string | null {
+  if (typeof window === 'undefined') return null
+  try {
+    return localStorage.getItem(LOCAL_STORAGE_TRACK_NAME_KEY)
+  } catch (err) {
+    console.warn('Could not load track name from localStorage', err)
+    return null
+  }
+}
+
+function saveTrackName(name: string | null) {
+  try {
+    if (name) {
+      localStorage.setItem(LOCAL_STORAGE_TRACK_NAME_KEY, name)
+    } else {
+      localStorage.removeItem(LOCAL_STORAGE_TRACK_NAME_KEY)
+    }
+  } catch (err) {
+    console.warn('Could not persist track name', err)
   }
 }
 
@@ -181,6 +204,7 @@ function clearPersistedSettings() {
   try {
     localStorage.removeItem(LOCAL_STORAGE_SETTINGS_KEY)
     localStorage.removeItem(LOCAL_STORAGE_TRACK_DATA_KEY)
+    localStorage.removeItem(LOCAL_STORAGE_TRACK_NAME_KEY)
     localStorage.removeItem(LOCAL_STORAGE_MARKER_POSITION_KEY)
     localStorage.removeItem(LOCAL_STORAGE_INPUT_MODE_KEY)
     localStorage.removeItem(LOCAL_STORAGE_TRACK_RESULTS_KEY)
@@ -231,6 +255,21 @@ async function parseGPXFile(file: File): Promise<[number, number][]> {
   return trackPoints
 }
 
+function buildGpxFileFromTrack(trackPoints: [number, number][], name: string): File {
+  const safeName = name.endsWith('.gpx') ? name : `${name}.gpx`
+  const gpxPoints = trackPoints.map(([lon, lat]) => `      <trkpt lat="${lat}" lon="${lon}"></trkpt>`).join('\n')
+  const gpxContent = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="WhatsAround" xmlns="http://www.topografix.com/GPX/1/1">
+  <trk>
+    <name>${safeName.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</name>
+    <trkseg>
+${gpxPoints}
+    </trkseg>
+  </trk>
+</gpx>`
+  return new File([gpxContent], safeName, { type: 'application/gpx+xml' })
+}
+
 type FilterModalMode = 'include' | 'exclude'
 
 type Settings = {
@@ -265,6 +304,7 @@ function DevApp() {
   const [error, setError] = useState<string | null>(null)
   const [notification, setNotification] = useState<string | null>(null)
   const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+  const [trackFileName, setTrackFileName] = useState<string | null>(() => loadTrackName())
   const [trackData, setTrackData] = useState<[number, number][]>(() => loadTrackData() || [])
   const [poiData, setPoiData] = useState<MapPoi[]>(() => {
     const mode = loadInputMode() || (loadMarkerPosition() ? 'marker' : 'track')
@@ -430,6 +470,17 @@ function DevApp() {
     }
   }, [trackData])
 
+  // Auto-save track name to localStorage whenever it changes
+  useEffect(() => {
+    saveTrackName(trackFileName)
+  }, [trackFileName])
+
+  useEffect(() => {
+    if (trackData.length === 0 && !uploadedFile) {
+      setTrackFileName(null)
+    }
+  }, [trackData, uploadedFile])
+
   // Auto-save marker position to localStorage whenever it changes
   useEffect(() => {
     saveMarkerPosition(markerPosition)
@@ -457,6 +508,7 @@ function DevApp() {
 
   const performTrackFileUpdate = async (file: File | null) => {
     setUploadedFile(file)
+    setTrackFileName(file ? file.name : null)
     setLastProcessedSettings(null) // Clear snapshot when file changes
     if (!file) {
       setTrackData([])
@@ -596,7 +648,7 @@ function DevApp() {
   const startProcessing = async () => {
     // Validate input based on mode
     if (inputMode === 'track') {
-      if (!uploadedFile) {
+      if (!uploadedFile && trackData.length === 0) {
         setError('Please upload a GPX file or switch to Map Marker mode')
         return
       }
@@ -621,7 +673,11 @@ function DevApp() {
       setJobStatus(null) // Reset job status when starting new processing
       setPoiData([]) // Clear only POIs, keep track visible
 
-      const fileToSend = inputMode === 'track' ? uploadedFile : null
+      const fileToSend = inputMode === 'track'
+        ? (uploadedFile || (trackData.length > 0
+          ? buildGpxFileFromTrack(trackData, trackFileName || 'restored-track')
+          : null))
+        : null
       const markerToSend = inputMode === 'marker' ? markerPosition : null
       const result = await apiClient.startProcessing(
         fileToSend,
@@ -680,6 +736,7 @@ function DevApp() {
     setError(null)
     setSheetOpen(true)
     setLastProcessedSettings(null) // Clear snapshot on reset
+    setTrackFileName(null)
     setSettings({
       projectName: config?.defaults.project_name || '',
       radiusKm: config?.defaults.radius_km || 5,
@@ -921,6 +978,7 @@ function DevApp() {
         onSettingsChange={handleSettingsChange}
         onFileSelected={handleFileSelected}
         selectedFile={uploadedFile}
+        trackLabel={uploadedFile?.name || trackFileName || (trackData.length > 0 ? 'Restored track' : null)}
         inputMode={inputMode}
         markerPosition={markerPosition}
         onClearMarker={handleClearMarker}

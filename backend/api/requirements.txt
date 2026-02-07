@@ -1,7 +1,7 @@
 # Core dependencies (from requirements-base.txt)
 gpxpy==1.6.2
 shapely==2.0.2
-pyproj==3.6.1
+pyproj==3.7.2
 requests==2.32.5
 tqdm==4.67.3
 folium==0.20.0

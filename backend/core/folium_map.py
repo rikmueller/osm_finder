@@ -63,13 +63,14 @@ def build_folium_map(
         tiles=None,  # We add explicit tile layers below so the user can switch
     )
 
-    for layer in tile_layers:
+    for idx, layer in enumerate(tile_layers):
         folium.TileLayer(
             tiles=layer.get("tiles"),
             name=layer.get("name", "Base"),
             attr=layer.get("attr"),
             overlay=False,
             control=True,
+            show=(idx == 0),
         ).add_to(m)
 
     # Add locate control button

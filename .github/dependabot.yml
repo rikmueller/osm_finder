@@ -19,7 +19,7 @@ updates:
       day: "monday"
       time: "06:00"
     target-branch: "dependabot-updates"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15
     rebase-strategy: "auto"
     labels:
       - "dependencies"
@@ -31,7 +31,7 @@ updates:
       day: "monday"
       time: "06:00"
     target-branch: "dependabot-updates"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15
     rebase-strategy: "auto"
     labels:
       - "dependencies"
